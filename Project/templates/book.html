@@ -5,39 +5,49 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 <!--===============================================================================================-->	
-	<link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
+	<link rel="icon" type="image/png" href="static/images/icons/favicon.ico"/>
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="static/vendor/bootstrap/css/bootstrap.min.css">
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="static/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="fonts/iconic/css/material-design-iconic-font.min.css">
+	<link rel="stylesheet" type="text/css" href="static/fonts/iconic/css/material-design-iconic-font.min.css">
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
+	<link rel="stylesheet" type="text/css" href="static/vendor/animate/animate.css">
 <!--===============================================================================================-->	
-	<link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css">
+	<link rel="stylesheet" type="text/css" href="static/vendor/css-hamburgers/hamburgers.min.css">
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="vendor/animsition/css/animsition.min.css">
+	<link rel="stylesheet" type="text/css" href="static/vendor/animsition/css/animsition.min.css">
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
+	<link rel="stylesheet" type="text/css" href="static/vendor/select2/select2.min.css">
 <!--===============================================================================================-->	
-	<link rel="stylesheet" type="text/css" href="vendor/daterangepicker/daterangepicker.css">
+	<link rel="stylesheet" type="text/css" href="static/vendor/daterangepicker/daterangepicker.css">
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="css/util.css">
-	<link rel="stylesheet" type="text/css" href="css/main.css">
-	<link href="style.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="static/css/util.css">
+	<link rel="stylesheet" type="text/css" href="static/css/main.css">
+	<link href="static/style.css" rel="stylesheet">
 <!--===============================================================================================-->
 </head>
 
 
 
 
-<body>
-
+<body >
 <!-- Navigation -->
+<script>
+	window.onload = function(){
+		func();
+	}
+
+	function func(){
+		document.getElementById("cnf").style.visibility = "{{ v }}";
+		document.getElementById("finish").style.visibility = "{{ v }}";
+
+	}
+</script>
 <nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">
 	<div class="container-fluid">
-		<a class="navbar-brand" href="#"><img src="images/logo.jpeg" width="180" height="90"></a>
+		<a class="navbar-brand" href="#"><img src="static/images/logo.jpeg" width="180" height="90"></a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
 				<span class="navbar-toggler-icon" ></span>	
 		</button>
@@ -64,38 +74,59 @@
 			
 		</div>
 	</div>
-    </nav>
+	</nav>
+<form action='/book' method="POST">
+	<label for="from locations">Available locations:</label>
+	<select name="from" id="from locations">
+		{% for l in locations %}
+			<option value="{{ l[0] }}">{{ l[0] }}</option>
+		{% endfor %}
+	</select>
+	<label for="to locations">Select destination location:</label>
+	<select name="to" id="to locations">
+		{% for l in loc %}
+			<option value="{{ l[0] }}">{{ l[0] }}</option>
+		{% endfor %}
+	</select>
+	<input type="submit" name="btn" value="book ride">
+
+<h3>{{ cost }}</h3>
+<h3>{{ dist }}</h3>
+
+<input id = 'cnf' type="submit" name="btn" value="confirm booking">
+<input id='finish' type="submit" name = "btn" value = "finish ride">
+</form>
+
+
+
+
+
+
+
+
+<!--Footer-->
+<footer>
+	<div class="container-fluid" padding>
+		<div class="row text-center">
+			<div class="col-md-4">
+				<img src="static/images/logo.jpeg" width="200" height="100">
+			</div>
+			<div class="col-md-4">
+				<h2><span>Connect via</span></h2>
+							<a href="https://www.instagram.com/"><img src="static/images/instagram.jpg" alt="Instagram>" width="25" height="25"/></a>
+							<a href="https://www.twitter.com/"><img src="static/images/twitter.png" alt="Twitter" width="25" height="25"/></a>
+							<a href="https://www.fb.com/"><img src="static/images/facebook.png" alt="Facebook" width="25" height="25"/></a>
+			</div>
+			<div class="col-md-4" id="help">
+			<h2><span>Customer Care</span></h2>
+							E-mail:  <a href="mailto:help@example.com?Subject=Help" target="_top">help@rove.com</a><br>
+							Ph-No:   080-123-45688
+			</div>
+		</div>
+	</div>
+</footer>
     
-
-
-
-
-
-
-
-
-    <footer>
-        <div class="container-fluid" padding>
-            <div class="row text-center">
-                <div class="col-md-4">
-                    <img src="images/logo.jpeg" width="200" height="100">
-                </div>
-                <div class="col-md-4">
-                    <h2><span>Connect via</span></h2>
-                                <a href="https://www.instagram.com/"><img src="images/instagram.jpg" alt="Instagram>" width="25" height="25"/></a>
-                                <a href="https://www.twitter.com/"><img src="images/twitter.png" alt="Twitter" width="25" height="25"/></a>
-                                <a href="https://www.fb.com/"><img src="images/facebook.png" alt="Facebook" width="25" height="25"/></a>
-                </div>
-                <div class="col-md-4" id="help">
-                <h2><span>Customer Care</span></h2>
-                                E-mail:  <a href="mailto:help@example.com?Subject=Help" target="_top">help@rove.com</a><br>
-                                Ph-No:   080-123-45688
-                </div>
-            </div>
-        </div>
-    </footer>
     
     
-    
-    </body>
-    </html>
+</body>
+</html>
