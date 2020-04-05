@@ -125,20 +125,24 @@ def login():
         print(res[0])
         if res[0] == password:
             A = "A"
+            res = db.session.execute('SELECT id from "customer_login" where username = :u',{"u":username}).fetchone()
+            curr_customer_id = res[0]
             locations = db.session.execute('SELECT loc_name FROM "location" as l,"vehicle" as v where l.id = v.address and v.status=:A',{"A":A}).fetchall()
             loc = db.session.execute('SELECT loc_name FROM "location"').fetchall()
-            return render_template('book.html', locations = locations,loc = loc, v = "hidden")
+            return render_template('book.html', locations = locations, loc = loc, opt = 1)
         return render_template('login.html', message="Password does not exist")
     
     return render_template('login.html')
 from_location = 'abc'
 to_location = 'abc'
 cost = 0
+vehicle_number = "KA"
 @app.route("/book", methods=["POST"])
 def book():
     global from_location
     global to_location
     global cost
+    global vehicle_number
     if request.form['btn'] == "book ride":
         f = request.form['from']
         from_location = f
@@ -156,25 +160,28 @@ def book():
         A = "A"
         locations = db.session.execute('SELECT loc_name FROM "location" as l,"vehicle" as v where l.id = v.address and v.status=:A',{"A":A}).fetchall()
         loc = db.session.execute('SELECT loc_name FROM "location"').fetchall()
-        return render_template('book.html', v = "visible", cost= cost, dist = dist, locations = locations, loc = loc, defaultf = f, defaultt = t)
+        return render_template('book.html', v = "visible",from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, opt = 2)
     if request.form['btn'] == "confirm booking":
         print(from_location)
         res = db.session.execute('SELECT id from "location" where loc_name = :f',{"f":from_location}).fetchone()
         print(res)
-    
         id = res[0]
         NA = "NA"
-        db.session.execute('UPDATE "vehicle" set status = :NA where address = (select address from "vehicle" where address = :i limit 1)',{"i":id, "NA":NA})
+        res = db.session.execute('select vehicle_number from "vehicle" where address = :i limit 1' ,{"i": id}).fetchone()
+        vehicle_number = res[0]
+        db.session.execute('UPDATE "vehicle" set status = :NA where vehicle_number = :v',{"NA":NA, "v":vehicle_number})
+        
         db.session.commit()
-        return render_template('book.html')
+        return render_template('book.html', opt = 3)
     if request.form['btn'] == "finish ride":
-        res = db.session.execute('SELECT id from "location" where loc_name = :f',{"f":from_location}).fetchone()
-        print(res)
-    
-        id = res[0]
+
         A = "A"
-        db.session.execute('UPDATE "vehicle" set status = :A, address = :to where address = (select address from "vehicle" where address = :i limit 1)',{"i":id, "A":A, "to": to_location})
-        db.session.execute('UPDATE "customer" set wallet = wallet - :cost where ')
+        res = db.session.execute('SELECT id from "location" where loc_name = :t',{"t":to_location}).fetchone()
+        to_location_id = res[0]
+        db.session.execute('UPDATE "vehicle" set status = :A, address = :to where vehicle_number = :v',{"A": A,"to": to_location_id, "v": vehicle_number})
+        db.session.execute('UPDATE "customer" set wallet = wallet - :cost where id = :cust_id ',{"cust_id":curr_customer_id, "cost":cost})
+        db.session.commit()
+        return render_template("done.html")
         
 
 

@@ -4,6 +4,7 @@
 	<title>Login</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta id="option" data-name="{{ opt }}">
 <!--===============================================================================================-->	
 	<link rel="icon" type="image/png" href="static/images/icons/favicon.ico"/>
 <!--===============================================================================================-->
@@ -32,19 +33,9 @@
 
 
 
-<body >
+<body>
 <!-- Navigation -->
-<script>
-	window.onload = function(){
-		func();
-	}
 
-	function func(){
-		document.getElementById("cnf").style.visibility = "{{ v }}";
-		document.getElementById("finish").style.visibility = "{{ v }}";
-
-	}
-</script>
 <nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">
 	<div class="container-fluid">
 		<a class="navbar-brand" href="#"><img src="static/images/logo.jpeg" width="180" height="90"></a>
@@ -76,6 +67,7 @@
 	</div>
 	</nav>
 <form action='/book' method="POST">
+	<div class = 'op2'>
 	<label for="from locations">Available locations:</label>
 	<select name="from" id="from locations">
 		{% for l in locations %}
@@ -88,14 +80,62 @@
 			<option value="{{ l[0] }}">{{ l[0] }}</option>
 		{% endfor %}
 	</select>
-	<input type="submit" name="btn" value="book ride">
-
-<h3>{{ cost }}</h3>
-<h3>{{ dist }}</h3>
-
-<input id = 'cnf' type="submit" name="btn" value="confirm booking">
-<input id='finish' type="submit" name = "btn" value = "finish ride">
+	<br>
+	<input type="submit" name ="btn" value="book ride">
+	</div>
+	<h3 class = "op1" style="display:inline">From : {{ from_loc }} to {{ to_loc }}</h3>
+	<h3 class = "op1">Distance : {{ dist }}</h3>
+	<h3 class = "op1">Cost : {{ cost }}</h3>
+	
+	<input class ="op1" id="foo" type="submit" name="btn" value="confirm booking">
+	<input class ="op1" type="submit" id="doo" name = "btn" value = "finish ride">
 </form>
+
+
+<script>
+
+	window.onload = myfunc();
+	function myfunc(){
+		option("{{ opt }}");
+	}
+
+		
+
+	
+
+	function option(opt){
+		if ( opt == 1){
+			func1();
+		}
+		
+		else if(opt == 2){
+			func2();
+		}
+
+		else func3();
+	}
+	function func1(){
+		var x = document.getElementsByClassName("op1");
+   		for (var i = 0; i < x.length; i++){
+       		x[i].style.display = "none";
+   		}
+	}
+	function func2(){
+		var x = document.getElementsByClassName("op2");
+		document.getElementById("doo").style.display = "none";
+	
+		for (var i = 0; i < x.length; i++){
+			x[i].style.display = "none";
+		}
+	}
+	function func3(){
+		var x = document.getElementsByClassName("op2");
+		for (var i = 0; i < x.length; i++){
+			x[i].style.display = "none";
+		}
+		document.getElementById("foo").style.display ="none"; 
+	}
+</script>
 
 
 
