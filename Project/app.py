@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
-import math
+import math, random
 
 
 app = Flask(__name__)
@@ -79,13 +79,20 @@ class Ride(db.Model):
         self.to_loc = to_loc
         self.customer_id = customer_id
 
+def generateOTP():
+    digits = "0123456789"
+    OTP = ""
 
+    for i in range(4):
+        OTP += digits[math.floor(random.random()*10)]
+    return OTP 
 
 
 @app.route('/', methods=["GET","POST"])
 def index():
     return render_template('index.html')  
 curr_customer_id = 0
+balance = 0
 @app.route('/signup', methods = ["GET","POST"])
 def signup():
     global curr_customer_id
@@ -107,10 +114,14 @@ def signup():
 
     
     return render_template('signup.html')
-
+locations = " "
+loc = " "
 @app.route('/login', methods = ["GET","POST"])
 def login():
     global curr_customer_id
+    global balance
+    global locations
+    global loc
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['pass']
@@ -127,26 +138,40 @@ def login():
             A = "A"
             res = db.session.execute('SELECT id from "customer_login" where username = :u',{"u":username}).fetchone()
             curr_customer_id = res[0]
-            locations = db.session.execute('SELECT loc_name FROM "location" as l,"vehicle" as v where l.id = v.address and v.status=:A',{"A":A}).fetchall()
+            locations = db.session.execute('SELECT distinct loc_name FROM "location" as l,"vehicle" as v where l.id = v.address and v.status=:A',{"A":A}).fetchall()
             loc = db.session.execute('SELECT loc_name FROM "location"').fetchall()
-            return render_template('book.html', locations = locations, loc = loc, opt = 1)
+            res = db.session.execute('SELECT wallet from "customer" where id = :id', {"id":curr_customer_id}).fetchone()
+            balance = res[0]
+            return render_template('book.html', locations = locations, loc = loc, balance = balance, opt = 1)
         return render_template('login.html', message="Password does not exist")
     
     return render_template('login.html')
 from_location = 'abc'
 to_location = 'abc'
 cost = 0
+dist = 0.0
 vehicle_number = "KA"
+otp = "0000"
+
 @app.route("/book", methods=["POST"])
 def book():
+    
     global from_location
     global to_location
     global cost
+    global dist
     global vehicle_number
+    global otp
+    global balance
     if request.form['btn'] == "book ride":
+        print("reach")
         f = request.form['from']
+        print(f)
+        print("reached")
+
         from_location = f
         t = request.form['to']
+        print("successs")
         to_location = t
         print(from_location)
         res = db.session.execute('SELECT x_coordinate, y_coordinate FROM "location" where loc_name =:from ',{"from":f}).fetchone()
@@ -158,10 +183,22 @@ def book():
         dist = round((math.sqrt((x1-x2)**2 + (y1-y2)**2)), 2)
         cost = int(dist * 3)
         A = "A"
-        locations = db.session.execute('SELECT loc_name FROM "location" as l,"vehicle" as v where l.id = v.address and v.status=:A',{"A":A}).fetchall()
-        loc = db.session.execute('SELECT loc_name FROM "location"').fetchall()
-        return render_template('book.html', v = "visible",from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, opt = 2)
+        return render_template('book.html',from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, opt = 2)
+    if request.form['btn'] == "start ride":
+        if request.form['otp'] == otp:
+            return render_template('book.html',from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, opt = 4)
+        else:
+            return render_template('book.html',from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, opt = 3, mesg = "wrong OTP, try again")
+
+    if request.form['btn'] == "add money":
+        amount = request.form['amount']
+        db.session.execute('UPDATE "customer" set wallet = wallet + :amt where id = :id',{"amt":amount, "id":curr_customer_id})
+        db.session.commit()
+        res = db.session.execute('SELECT wallet from "customer" where id = :id', {"id":curr_customer_id}).fetchone()
+        balance = res[0]
+        return render_template('book.html', locations = locations, loc = loc, balance = balance, opt = 1)
     if request.form['btn'] == "confirm booking":
+        
         print(from_location)
         res = db.session.execute('SELECT id from "location" where loc_name = :f',{"f":from_location}).fetchone()
         print(res)
@@ -169,12 +206,15 @@ def book():
         NA = "NA"
         res = db.session.execute('select vehicle_number from "vehicle" where address = :i limit 1' ,{"i": id}).fetchone()
         vehicle_number = res[0]
+        print(vehicle_number)
         db.session.execute('UPDATE "vehicle" set status = :NA where vehicle_number = :v',{"NA":NA, "v":vehicle_number})
-        
         db.session.commit()
-        return render_template('book.html', opt = 3)
+        otp = generateOTP()
+        return render_template('book.html', from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, OTP = otp, opt = 3)
+       
+        
+    
     if request.form['btn'] == "finish ride":
-
         A = "A"
         res = db.session.execute('SELECT id from "location" where loc_name = :t',{"t":to_location}).fetchone()
         to_location_id = res[0]

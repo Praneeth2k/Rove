@@ -5,6 +5,10 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta id="option" data-name="{{ opt }}">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 <!--===============================================================================================-->	
 	<link rel="icon" type="image/png" href="static/images/icons/favicon.ico"/>
 <!--===============================================================================================-->
@@ -35,7 +39,7 @@
 
 <body>
 <!-- Navigation -->
-
+<h1 id = "xyz"> Hello</h1>
 <nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">
 	<div class="container-fluid">
 		<a class="navbar-brand" href="#"><img src="static/images/logo.jpeg" width="180" height="90"></a>
@@ -68,27 +72,61 @@
 	</nav>
 <form action='/book' method="POST">
 	<div class = 'op2'>
-	<label for="from locations">Available locations:</label>
-	<select name="from" id="from locations">
-		{% for l in locations %}
-			<option value="{{ l[0] }}">{{ l[0] }}</option>
-		{% endfor %}
-	</select>
-	<label for="to locations">Select destination location:</label>
-	<select name="to" id="to locations">
-		{% for l in loc %}
-			<option value="{{ l[0] }}">{{ l[0] }}</option>
-		{% endfor %}
-	</select>
-	<br>
-	<input type="submit" name ="btn" value="book ride">
+		<div class = 'container'>
+			<div class = "row">
+				<div class = "dropdown col-lg-4 col-xl-4">
+					<label for = "from">Select From location:</label>
+					<button type = "button" id = "from" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+						Available locations
+					</button>
+					<input style = "display: none" type = "text" name = "from" id="ffrom" placeholder="ding dong" value="vdsdf">
+					<div class = "dropdown-menu">
+						
+						{% for l in locations %}
+							<option class = "dropdown-item" onclick = "change_From('{{ l[0] }}')" value="{{ l[0] }}">{{ l[0] }}</option>
+						{% endfor %}
+						
+					</div>
+				</div>
+
+				<div class = "dropdown col-lg-4 col-xl-5">
+					<label for = "to">Select Destination:</label>
+					<button type = "button" id = "to" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+						Destination
+					</button>
+					<input style = "display:none" type = "text" name = "to" id = "tto" placeholder="ding dong" value="vdsdf">
+					<div class = "dropdown-menu">
+						
+						{% for l in loc %}
+							<option class = "dropdown-item" onclick = "alter_Dest('{{ l[0] }}')" value="{{ l[0] }}">{{ l[0] }}</option>
+						{% endfor %}
+						
+					</div>
+				</div>
+				<div class = "balance col-lg-4 col-xl-4">
+					<h3 id = "wallet" style = "display:none">Your remaining balance is: {{ balance }}</h3>
+					<button onclick="add_money()" type="button" class="btn btn-outline-light btn-lg">Add money</button>
+					<input style = "display:none" type = "text" placeholder = "Enter amount" name = "amount" id = "amount">
+					<input style = "display:none" id = "add" type = "submit" name = "btn" value ="add money">
+				</div>
+			</div>
+		</div>
+			<br>
+			<input type="submit" name ="btn" value="book ride">
+
+		
 	</div>
-	<h3 class = "op1" style="display:inline">From : {{ from_loc }} to {{ to_loc }}</h3>
-	<h3 class = "op1">Distance : {{ dist }}</h3>
-	<h3 class = "op1">Cost : {{ cost }}</h3>
-	
-	<input class ="op1" id="foo" type="submit" name="btn" value="confirm booking">
-	<input class ="op1" type="submit" id="doo" name = "btn" value = "finish ride">
+			<h3 class = "op1" id = "info">From : {{ from_loc }} to {{ to_loc }}</h3>
+			<h3 class = "op1">Distance : {{ dist }}</h3>
+			<h3 class = "op1">Cost : {{ cost }}</h3>
+			<h3 class = "op1 op3">Your OTP for the ride is : {{ OTP }} </h3>
+			<h3 class = "op1 op3">{{ mesg }}</h3>
+			<h3 class = "op1 op3">Enter the otp here:</h3><input class = "op1 op3" type = "text" name = "otp" placeholder = "Enter 4 digit OTP">
+			
+			<input class ="op1" id="foo" type="submit" name="btn" value="confirm booking">
+			<input class ="op1" type="submit" id="moo" name = "btn" value = "start ride">
+			<input class ="op1" type="submit" id="doo" name = "btn" value = "finish ride">
+			
 </form>
 
 
@@ -112,28 +150,73 @@
 			func2();
 		}
 
-		else func3();
+		else if(opt == 3){
+			func3();
+		}
+		else func4();
 	}
 	function func1(){
 		var x = document.getElementsByClassName("op1");
    		for (var i = 0; i < x.length; i++){
        		x[i].style.display = "none";
-   		}
+		}
+		document.getElementById("wallet").style.display = "block";
 	}
 	function func2(){
 		var x = document.getElementsByClassName("op2");
-		document.getElementById("doo").style.display = "none";
-	
 		for (var i = 0; i < x.length; i++){
 			x[i].style.display = "none";
 		}
+		var y = document.getElementsByClassName("op3");
+		for (i = 0; i < y.length; i++){
+			y[i].style.display = "none";
+		}
+
+		document.getElementById("doo").style.display = "none";
+		document.getElementById("moo").style.display = "none";
+		
+		
+
 	}
 	function func3(){
 		var x = document.getElementsByClassName("op2");
 		for (var i = 0; i < x.length; i++){
 			x[i].style.display = "none";
 		}
-		document.getElementById("foo").style.display ="none"; 
+		
+		document.getElementById("foo").style.display ="none";
+		document.getElementById("doo").style.display = "none"; 
+		document.getElementById("info").innerHTML = "Ride in progrees";
+		
+	}
+	function func4(){
+		var x = document.getElementsByClassName("op2");
+		for (var i = 0; i < x.length; i++){
+			x[i].style.display = "none";
+		}
+		var y = document.getElementsByClassName("op3");
+		for (i = 0; i < y.length; i++){
+			y[i].style.display = "none";
+		}
+		
+		document.getElementById("foo").style.display ="none";
+		document.getElementById("moo").style.display = "none";
+		
+		
+		document.getElementById("info").innerHTML = "Ride in progrees";
+	}
+
+	function change_From(l){
+		document.getElementById("from").innerHTML = l;
+		document.getElementById("ffrom").value = l;
+	}
+	function alter_Dest(l){
+		document.getElementById("to").innerHTML = l;
+		document.getElementById("tto").value = l;
+	}
+	function add_money(){
+		document.getElementById("amount").style.display = "inline";
+		document.getElementById("add").style.display = "inline";
 	}
 </script>
 
