@@ -143,7 +143,7 @@ def login():
             res = db.session.execute('SELECT wallet from "customer" where id = :id', {"id":curr_customer_id}).fetchone()
             balance = res[0]
             return render_template('book.html', locations = locations, loc = loc, balance = balance, opt = 1)
-        return render_template('login.html', message="Password does not exist")
+        return render_template('login.html', message="Wrong password")
     
     return render_template('login.html')
 from_location = 'abc'
@@ -188,16 +188,18 @@ def book():
         if request.form['otp'] == otp:
             return render_template('book.html',from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, opt = 4)
         else:
-            return render_template('book.html',from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, opt = 3, mesg = "wrong OTP, try again")
+            return render_template('book.html',from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, opt = 3, mesg = "wrong OTP, try again", OTP = otp)
 
-    if request.form['btn'] == "add money":
+    if request.form['btn'] == "Add money":
+        
         amount = request.form['amount']
+        
         db.session.execute('UPDATE "customer" set wallet = wallet + :amt where id = :id',{"amt":amount, "id":curr_customer_id})
         db.session.commit()
         res = db.session.execute('SELECT wallet from "customer" where id = :id', {"id":curr_customer_id}).fetchone()
         balance = res[0]
         return render_template('book.html', locations = locations, loc = loc, balance = balance, opt = 1)
-    if request.form['btn'] == "confirm booking":
+    if request.form['btn'] == "Confirm Booking":
         
         print(from_location)
         res = db.session.execute('SELECT id from "location" where loc_name = :f',{"f":from_location}).fetchone()

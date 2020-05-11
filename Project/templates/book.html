@@ -28,10 +28,10 @@
 <!--===============================================================================================-->	
 	<link rel="stylesheet" type="text/css" href="static/vendor/daterangepicker/daterangepicker.css">
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="static/css/util.css">
-	<link rel="stylesheet" type="text/css" href="static/css/main.css">
-	<link href="static/style.css" rel="stylesheet">
+
+<link href="static/style.css" rel="stylesheet">
 <!--===============================================================================================-->
+
 </head>
 
 
@@ -39,7 +39,6 @@
 
 <body>
 <!-- Navigation -->
-<h1 id = "xyz"> Hello</h1>
 <nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">
 	<div class="container-fluid">
 		<a class="navbar-brand" href="#"><img src="static/images/logo.jpeg" width="180" height="90"></a>
@@ -70,64 +69,79 @@
 		</div>
 	</div>
 	</nav>
-<form action='/book' method="POST">
-	<div class = 'op2'>
-		<div class = 'container'>
-			<div class = "row">
-				<div class = "dropdown col-lg-4 col-xl-4">
-					<label for = "from">Select From location:</label>
-					<button type = "button" id = "from" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-						Available locations
-					</button>
-					<input style = "display: none" type = "text" name = "from" id="ffrom" placeholder="ding dong" value="vdsdf">
-					<div class = "dropdown-menu">
-						
-						{% for l in locations %}
-							<option class = "dropdown-item" onclick = "change_From('{{ l[0] }}')" value="{{ l[0] }}">{{ l[0] }}</option>
-						{% endfor %}
-						
-					</div>
-				</div>
+	<h1></h1>
+<div style = "padding-top: 4em; padding-bottom: 12em; padding-left: 3em; padding-right: 2em;">	
+	<form action='/book' method="POST" style = "display:inline;">
+		<div class = 'op2'>
+			<div class = 'container'>
+				<div class = "row">
+					
+						<div class = "dropdown col-lg-4 col-xl-4">
+							<label for = "from">Select From location</label><br>
+							<button type = "button" id = "from" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+								Available locations
+							</button>
+							<input style = "display: none" type = "text" name = "from" id="ffrom" placeholder="ding dong" value="vdsdf">
+							<div class = "dropdown-menu">
+								
+								{% for l in locations %}
+									<option class = "dropdown-item" onclick = "change_From('{{ l[0] }}')" value="{{ l[0] }}">{{ l[0] }}</option>
+								{% endfor %}
+								
+							</div>
+						</div>
 
-				<div class = "dropdown col-lg-4 col-xl-5">
-					<label for = "to">Select Destination:</label>
-					<button type = "button" id = "to" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-						Destination
-					</button>
-					<input style = "display:none" type = "text" name = "to" id = "tto" placeholder="ding dong" value="vdsdf">
-					<div class = "dropdown-menu">
-						
-						{% for l in loc %}
-							<option class = "dropdown-item" onclick = "alter_Dest('{{ l[0] }}')" value="{{ l[0] }}">{{ l[0] }}</option>
-						{% endfor %}
-						
+						<div class = "dropdown col-lg-4 col-xl-4">
+							<label for = "to">Select Destination</label><br>
+							<button type = "button" id = "to" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+								Destination
+							</button>
+							<input style = "display:none" type = "text" name = "to" id = "tto" placeholder="ding dong" value="vdsdf">
+							<div class = "dropdown-menu">
+								
+								{% for l in loc %}
+									<option class = "dropdown-item" onclick = "alter_Dest('{{ l[0] }}')" value="{{ l[0] }}">{{ l[0] }}</option>
+								{% endfor %}
+								
+							</div>
+						</div>
+	
+					<div class = "balance col-lg-4 col-xl-4" style = "border-radius: 25px; background:rgb(255, 85, 85); width:fit-content">
+						<h3 id = "wallet" style = "display:none; font-size:1rem; color: antiquewhite; " >Your remaining balance is: Rs {{ balance }}</h3>
+						<button onclick="add_money()" type="button" class="btn btn-info btn-sm" id = "Add money">Add money</button><br>
+						<input style = "display:none" type = "text" placeholder = "Enter amount" name = "amount" id = "amount"><br><br>
+						<input style = "display:none" id = "add" type = "submit" class="btn btn-info btn-sm" name = "btn" value ="Add money">
 					</div>
 				</div>
-				<div class = "balance col-lg-4 col-xl-4">
-					<h3 id = "wallet" style = "display:none">Your remaining balance is: {{ balance }}</h3>
-					<button onclick="add_money()" type="button" class="btn btn-outline-light btn-lg">Add money</button>
-					<input style = "display:none" type = "text" placeholder = "Enter amount" name = "amount" id = "amount">
-					<input style = "display:none" id = "add" type = "submit" name = "btn" value ="add money">
+				<br><br><br>
+
+				<br>
+				<div style = "padding-left: 37px;">
+				<input type="submit" class = "btn btn-outline-primary" name ="btn" value="book ride">
 				</div>
+			
 			</div>
 		</div>
-			<br>
-			<input type="submit" name ="btn" value="book ride">
+			<div style = "color: cadetblue; font-family:monospace, Courier, monospace; font-size: 1.5em; ">
+				<h3 class = "op1" id = "info">From {{ from_loc }} to {{ to_loc }}</h3>
+				<marquee width = 50% class = "op1 op2" id = "marq"
+				`scrollamount="10"`
+				direction="right"
+				behavior="scroll">
+				<img src="static/img/bike.jpeg" />
+				</marquee>
+				<div class = "op1">Distance : {{ dist }} Km &ensp; Cost : {{ cost }} Rs </div><br>
+				<div class = "op1 op3" style = "color: rgb(255, 85, 85); font-family: helvetica;">Your OTP for the ride is : {{ OTP }} </div>
+				<h3 class = "op1 op3">{{ mesg }}</h3>
+				<div class = "op1 op3" style = "color:rgb(255, 85, 85); font-family:monospace; font-size: 1.4em;">Enter the otp here:<input class = "op1 op3" type = "text" name = "otp" placeholder = "Enter 4 digit OTP"></div>
+				<br><br>
+				<input class ="op1 btn btn-outline-primary" style = "font-family:Arial" id="foo" type="submit" name="btn" value="Confirm Booking">
+				<input class ="op1 btn btn-outline-primary" type="submit" id="moo" name = "btn" value = "start ride">
+				<input class ="op1 btn btn-outline-primary" type="submit" id="doo" name = "btn" value = "finish ride">
+			</div>
+	</form>
+</div>
 
-		
-	</div>
-			<h3 class = "op1" id = "info">From : {{ from_loc }} to {{ to_loc }}</h3>
-			<h3 class = "op1">Distance : {{ dist }}</h3>
-			<h3 class = "op1">Cost : {{ cost }}</h3>
-			<h3 class = "op1 op3">Your OTP for the ride is : {{ OTP }} </h3>
-			<h3 class = "op1 op3">{{ mesg }}</h3>
-			<h3 class = "op1 op3">Enter the otp here:</h3><input class = "op1 op3" type = "text" name = "otp" placeholder = "Enter 4 digit OTP">
-			
-			<input class ="op1" id="foo" type="submit" name="btn" value="confirm booking">
-			<input class ="op1" type="submit" id="moo" name = "btn" value = "start ride">
-			<input class ="op1" type="submit" id="doo" name = "btn" value = "finish ride">
-			
-</form>
 
 
 <script>
@@ -186,7 +200,7 @@
 		
 		document.getElementById("foo").style.display ="none";
 		document.getElementById("doo").style.display = "none"; 
-		document.getElementById("info").innerHTML = "Ride in progrees";
+		document.getElementById("info").style.display = "none"
 		
 	}
 	function func4(){
@@ -201,7 +215,8 @@
 		
 		document.getElementById("foo").style.display ="none";
 		document.getElementById("moo").style.display = "none";
-		
+		document.getElementById("marq").style.display = "inline";
+		document.getElementById("info").style.display = "inline";
 		
 		document.getElementById("info").innerHTML = "Ride in progrees";
 	}
@@ -217,9 +232,9 @@
 	function add_money(){
 		document.getElementById("amount").style.display = "inline";
 		document.getElementById("add").style.display = "inline";
+		document.getElementById("Add money").style.display = "none";
 	}
 </script>
-
 
 
 
