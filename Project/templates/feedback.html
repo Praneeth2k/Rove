@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Done</title>
+    <title>Feedback</title>
     <!--===============================================================================================-->	
 	<link rel="icon" type="image/png" href="static/images/icons/favicon.ico"/>
     <!--===============================================================================================-->
@@ -28,80 +28,63 @@
     <!--===============================================================================================-->
 </head>
 <body>
-    <nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#"><img src="static/images/logo.jpeg" width="180" height="90"></a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
-                    <span class="navbar-toggler-icon" ></span>	
-            </button>
-            <div class="collapse navbar-collapse" id="navbarResponsive">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html">Home</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="Login.html">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="signup.html">Signup</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html#about">About</a>
-                    </li>
-                    <li class="nav-item">
-                            <a class="nav-link" href="index.html#help">Help</a>
-                    </li>
-        
-                </ul> 
-        
-                
-            </div>
-        </div>
-    </nav>
+    <!-- Navigation -->
+<nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">
+	<div class="container-fluid">
+		<a class="navbar-brand" href="#"><img src="static/images/logo.jpeg" width="180" height="90"></a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
+				<span class="navbar-toggler-icon" ></span>	
+		</button>
+		<div class="collapse navbar-collapse" id="navbarResponsive">
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item">
+					<a class="nav-link" href="index.html">Home</a>
+				</li>
+				<li class="nav-item active">
+					<a class="nav-link" href="Login.html">Login</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="signup.html">Signup</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="index.html#about">About</a>
+				</li>
+				<li class="nav-item">
+						<a class="nav-link" href="index.html#help">Help</a>
+				</li>
+	
+			</ul> 
+	
+			
+		</div>
+	</div>
+</nav>
 
 <!--Body-->
-    <div style = "padding: 3rem;">
-        <form action = "/done", method = "POST">
-            <div>
-                <p>Book another ride:</p> <input type = "submit" name = "btn" value = "New Ride">
-            </div>
-            <div>
-                <p id = "dont-hide" class = "op2">Rise a complaint: <button type = 'button' onclick = "func()">Complain</button></p>
-                <textarea class = "hide op1 op2" name = "complaint" cols = 30 rows = 10 placeholder = "Type your complaint here"></textarea>
-                <input type = "submit" name = "btn" value = "comp" class="hide op1 op2 btn btn-outline-primary">
-                <p class = "op1">{{ message }}</p>
-            </div>
-        </form>
-    </div>
 
-    <script>
-        window.onload = option();
-        function option(){
-            if("{{ opt }}" == 1){
-                func1();
-            }
-            else func2();
-        }
-        function func1(){
-            var x = document.getElementsByClassName("op1");
-   		    for (var i = 0; i < x.length; i++){
-       		    x[i].style.display = "none";
-		    }
-        }
-        function func2(){
-            var x = document.getElementsByClassName("op2");
-   		    for (var i = 0; i < x.length; i++){
-       		    x[i].style.display = "none";
-		    }
-        }
-        function func(){
-            var x = document.getElementsByClassName("hide");
-   		    for (var i = 0; i < x.length; i++){
-       		    x[i].style.display = "inline";
-		    }
-            document.getElementById("dont-hide").style.display = 'none';
-        }
-    </script>
+    <div style = "padding:3rem">
+    <form action="/feedback" method="POST">
+        <div class="form-group">
+            <h3>Please rate your experience</h3>
+            <input type="radio" name="rating" value="1" /> 1
+            <input type="radio" name="rating" value="2" /> 2
+            <input type="radio" name="rating" value="3" /> 3
+            <input type="radio" name="rating" value="4" /> 4
+            <input type="radio" name="rating" value="5" checked/> 5
+        </div>
+        <div class="form-group">
+            <h3>Comments about your experience</h3>
+            <textarea
+            name="comments"
+            id=""
+            cols="30"
+            rows="10"
+            placeholder="Tell us what you liked and/or did not like"
+        ></textarea>
+        </div>
+        <input type="submit" value="Submit" class="op1 btn btn-outline-primary" />
+    </form>
+    </div>
 
     <!--Footer-->
 <footer>
@@ -124,5 +107,8 @@
 		</div>
 	</div>
 </footer>
+
+
+    
 </body>
 </html>

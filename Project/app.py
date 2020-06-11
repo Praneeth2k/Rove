@@ -72,12 +72,27 @@ class Ride(db.Model):
     from_loc = db.Column(db.Integer, db.ForeignKey('location.id'))
     to_loc = db.Column(db.Integer, db.ForeignKey('location.id'))
     customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'))
+    rating = db.Column(db.Integer)
+    feedback = db.Column(db.String)
 
-    def __init__(self, vehicle_num, from_loc, to_loc, customer_id):
+    def __init__(self, vehicle_num, from_loc, to_loc, customer_id, rating, feedback):
         self.vehicle_num = vehicle_num
         self.from_loc = from_loc
         self.to_loc = to_loc
         self.customer_id = customer_id
+        self.rating = rating
+        self.feedback = feedback
+
+class Complaint(db.Model):
+    __tablename__ = "complaint"
+    id = db.Column(db.Integer, primary_key = True)
+    cust_id = db.Column(db.Integer, db.ForeignKey('customer.id'))
+    complaint = db.Column(db.String)
+
+    def __init__(self, cust_id, complaint):
+        self.cust_id = cust_id
+        self.complaint = complaint
+
 
 def generateOTP():
     digits = "0123456789"
@@ -102,10 +117,9 @@ def signup():
             mobile = request.form['moblie']
             username = request.form['username']
             password = request.form['pass']
-            db.session.execute('INSERT INTO "customer"(name, mobile) values(:name, :mobile)',{"name": name, "mobile": mobile})
+            db.session.execute('INSERT INTO "customer"(name, mobile, wallet) values(:name, :mobile, 0)',{"name": name, "mobile": mobile})
             db.session.commit()
             res = db.session.execute('SELECT id from "customer" where name=:n',{"n":name}).fetchone()
-            print(res)
             curr_customer_id = res[0] 
             print(curr_customer_id)
             db.session.execute('INSERT INTO "customer_login" values(:id, :username, :password)',{"username": username, "password": password,"id":curr_customer_id})
@@ -127,8 +141,7 @@ def login():
         password = request.form['pass']
 
         count = db.session.execute('SELECT COUNT(*) FROM "customer_login" where username = :username', {"username": username}).fetchone()
-        print(count)
-        print(count[0])
+        
         if count[0] == 0:
             return render_template('login.html', message="Username does not exist")
         res = db.session.execute('SELECT password FROM "customer_login" WHERE username = :username', {"username": username}).fetchone()
@@ -164,14 +177,10 @@ def book():
     global otp
     global balance
     if request.form['btn'] == "book ride":
-        print("reach")
         f = request.form['from']
-        print(f)
-        print("reached")
 
         from_location = f
         t = request.form['to']
-        print("successs")
         to_location = t
         print(from_location)
         res = db.session.execute('SELECT x_coordinate, y_coordinate FROM "location" where loc_name =:from ',{"from":f}).fetchone()
@@ -201,9 +210,9 @@ def book():
         return render_template('book.html', locations = locations, loc = loc, balance = balance, opt = 1)
     if request.form['btn'] == "Confirm Booking":
         
-        print(from_location)
+        
         res = db.session.execute('SELECT id from "location" where loc_name = :f',{"f":from_location}).fetchone()
-        print(res)
+        
         id = res[0]
         NA = "NA"
         res = db.session.execute('select vehicle_number from "vehicle" where address = :i limit 1' ,{"i": id}).fetchone()
@@ -223,9 +232,41 @@ def book():
         db.session.execute('UPDATE "vehicle" set status = :A, address = :to where vehicle_number = :v',{"A": A,"to": to_location_id, "v": vehicle_number})
         db.session.execute('UPDATE "customer" set wallet = wallet - :cost where id = :cust_id ',{"cust_id":curr_customer_id, "cost":cost})
         db.session.commit()
-        return render_template("done.html")
+        return render_template("feedback.html")
         
+@app.route("/feedback", methods=["POST"])
+def feedback():
+    rating = request.form['rating']
+    comments = request.form['comments']
+    res = db.session.execute('SELECT id from "location" where loc_name = :f',{"f": from_location}).fetchone()
+    f = res[0]
+    res = db.session.execute('SELECT id from "location" where loc_name = :t',{"t": to_location}).fetchone()
+    t = res[0]
+    db.session.execute('INSERT into "ride"(vehicle_num, from_loc, to_loc, customer_id, rating, feedback) values(:v, :f , :t, :c, :r, :com)',{"v": vehicle_number, "f": f, "t":t, "c":curr_customer_id, "r":rating, "com":comments})
+    db.session.commit()
+    return render_template("done.html", opt = 1)
 
+@app.route("/done", methods = ["POST"])
+def done():
+    global balance
+    global locations
+    global loc
+    if request.method == "POST":
+        print("Reached heree")
+        if request.form['btn'] == 'New Ride':
+            A = "A"
+            locations = db.session.execute('SELECT distinct loc_name FROM "location" as l,"vehicle" as v where l.id = v.address and v.status=:A',{"A":A}).fetchall()
+            loc = db.session.execute('SELECT loc_name FROM "location"').fetchall()
+            res = db.session.execute('SELECT wallet from "customer" where id = :id', {"id":curr_customer_id}).fetchone()
+            balance = res[0]
+            return render_template('book.html', locations = locations, loc = loc, balance = balance, opt = 1)
+
+        if request.form['btn'] == 'comp':
+            print("Reached")
+            complaint = request.form['complaint']
+            db.session.execute('INSERT into "complaint"(cust_id, complaint) values (:id, :c)',{"id":curr_customer_id,"c":complaint})
+            db.session.commit()  
+            return render_template('done.html', message = "Sorry for the inconvinience, your complaint has been registered", opt = 2)
 
 
     
