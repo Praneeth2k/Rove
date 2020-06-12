@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    {% block head %}
+
+    {% endblock %}
+</head>
+<body>
+		
+	
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">
+<div class="container-fluid">
+	<a class="navbar-brand" href="#"><img src="static/images/logo.jpeg" width="180" height="90"></a>
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
+			<span class="navbar-toggler-icon" ></span>	
+	</button>
+	<div class="collapse navbar-collapse" id="navbarResponsive">
+		<ul class="navbar-nav ml-auto">
+			<li class="nav-item">
+				<a class="nav-link" id = 'i' onclick = "index()">Home</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" id = 'l' onclick = "login()">Login</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" id = 's' onclick = "signup()">Signup</a>
+			</li>
+
+		</ul> 
+
+		
+	</div>
+</div>
+</nav>
+
+{% block body %}
+{% endblock %}
+
+<script>
+	function index(){
+		location.href = "/";
+	}
+	function login(){
+		location.href = "/login";
+	}
+	function signup(){
+		location.href = "/signup";
+	}
+</script>
+
+<!--- Footer -->
+<footer>
+<div class="container-fluid" padding>
+	<div class="row text-center">
+		<div class="col-md-4">
+			<img src="static/images/logo.jpeg" width="200" height="100">
+		</div>
+		<div class="col-md-4">
+			<h2><span>Connect via</span></h2>
+						<a href="https://www.instagram.com/"><img src="static/images/instagram.jpg" alt="Instagram>" width="25" height="25"/></a>
+						<a href="https://www.twitter.com/"><img src="static/images/twitter.png" alt="Twitter" width="25" height="25"/></a>
+						<a href="https://www.fb.com/"><img src="static/images/facebook.png" alt="Facebook" width="25" height="25"/></a>
+		</div>
+		<div class="col-md-4" id="help">
+		<h2><span>Customer Care</span></h2>
+						E-mail:  <a href="mailto:help@example.com?Subject=Help" target="_top">help@rove.com</a><br>
+						Ph-No:   080-123-45688
+		</div>
+	</div>
+</div>
+</footer>
+
+
+
+</body>
+</html>
