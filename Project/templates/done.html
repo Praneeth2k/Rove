@@ -33,10 +33,13 @@
             </div>
             <br><br><br>
             <div>
-                <p id = "dont-hide" class = "op2">Rise a complaint: </p><button class = "op2" type = 'button' onclick = "func()">Complain</button>
+                <p id = "dont-hide" class = "op2">Rise a complaint: </p><button id = "dont-hide-me" class = "op2 btn btn primary" type = 'button' onclick = "func()">Complain</button>
                 <textarea class = "hide op1 op2" name = "complaint" cols = 30 rows = 10 placeholder = "Type your complaint here"></textarea>
                 <input type = "submit" name = "btn" value = "comp" class="hide op1 op2 btn btn-outline-primary">
                 <p class = "op1">{{ message }}</p>
+            </div>
+            <div>
+                <p>Sign out</p><button name = "btn" value = "sign-out" class = "op2 btn btn primary">Sign out</button>
             </div>
         </form>
     </div>
@@ -67,6 +70,14 @@
        		    x[i].style.display = "inline";
 		    }
             document.getElementById("dont-hide").style.display = 'none';
+            document.getElementById("dont-hide-me").style.display = 'none';
         }
+        
+        window.onload = myfunc();
+	    function myfunc(){
+		    option("{{ opt }}");
+		    document.getElementById('so').style.display = "block";
+	    }
+    
     </script>
    {% endblock %}

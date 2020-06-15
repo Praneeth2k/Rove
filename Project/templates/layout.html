@@ -29,6 +29,9 @@
 			<li class="nav-item">
 				<a class="nav-link" id = 's' onclick = "signup()">Signup</a>
 			</li>
+			<li class = "nav-item">
+				<a class="nav-link" id = 'so' onclick = "signout()" style = "display:none">Sign Out</a>
+			</li>
 
 		</ul> 
 
@@ -49,6 +52,9 @@
 	}
 	function signup(){
 		location.href = "/signup";
+	}
+	function signout(){
+		location.href = "/";
 	}
 </script>
 

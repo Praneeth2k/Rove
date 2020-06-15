@@ -121,7 +121,6 @@ def signup():
             db.session.commit()
             res = db.session.execute('SELECT id from "customer" where name=:n',{"n":name}).fetchone()
             curr_customer_id = res[0] 
-            print(curr_customer_id)
             db.session.execute('INSERT INTO "customer_login" values(:id, :username, :password)',{"username": username, "password": password,"id":curr_customer_id})
             db.session.commit()
             return render_template('login.html')
@@ -145,8 +144,7 @@ def login():
         if count[0] == 0:
             return render_template('login.html', message="Username does not exist")
         res = db.session.execute('SELECT password FROM "customer_login" WHERE username = :username', {"username": username}).fetchone()
-        print(res)
-        print(res[0])
+        
         if res[0] == password:
             A = "A"
             res = db.session.execute('SELECT id from "customer_login" where username = :u',{"u":username}).fetchone()
@@ -192,7 +190,7 @@ def book():
         dist = round((math.sqrt((x1-x2)**2 + (y1-y2)**2)), 2)
         cost = int(dist * 3)
         A = "A"
-        return render_template('book.html',from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, opt = 2)
+        return render_template('book.html',from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, balance = balance, opt = 2)
     if request.form['btn'] == "start ride":
         if request.form['otp'] == otp:
             return render_template('book.html',from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, opt = 4)
@@ -208,6 +206,17 @@ def book():
         res = db.session.execute('SELECT wallet from "customer" where id = :id', {"id":curr_customer_id}).fetchone()
         balance = res[0]
         return render_template('book.html', locations = locations, loc = loc, balance = balance, opt = 1)
+
+    if request.form['btn'] == "Add money ":
+        
+        amount = request.form['amount']
+        
+        db.session.execute('UPDATE "customer" set wallet = wallet + :amt where id = :id',{"amt":amount, "id":curr_customer_id})
+        db.session.commit()
+        res = db.session.execute('SELECT wallet from "customer" where id = :id', {"id":curr_customer_id}).fetchone()
+        balance = res[0]
+        return render_template('book.html',from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, balance = balance, opt = 2)
+
     if request.form['btn'] == "Confirm Booking":
         
         
@@ -221,7 +230,7 @@ def book():
         db.session.execute('UPDATE "vehicle" set status = :NA where vehicle_number = :v',{"NA":NA, "v":vehicle_number})
         db.session.commit()
         otp = generateOTP()
-        return render_template('book.html', from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, OTP = otp, opt = 3)
+        return render_template('book.html', from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, OTP = otp, opt = 3, balance = balance)
        
         
     
@@ -252,7 +261,7 @@ def done():
     global locations
     global loc
     if request.method == "POST":
-        print("Reached heree")
+        
         if request.form['btn'] == 'New Ride':
             A = "A"
             locations = db.session.execute('SELECT distinct loc_name FROM "location" as l,"vehicle" as v where l.id = v.address and v.status=:A',{"A":A}).fetchall()
@@ -262,11 +271,13 @@ def done():
             return render_template('book.html', locations = locations, loc = loc, balance = balance, opt = 1)
 
         if request.form['btn'] == 'comp':
-            print("Reached")
             complaint = request.form['complaint']
             db.session.execute('INSERT into "complaint"(cust_id, complaint) values (:id, :c)',{"id":curr_customer_id,"c":complaint})
             db.session.commit()  
             return render_template('done.html', message = "Sorry for the inconvinience, your complaint has been registered", opt = 2)
 
+        if request.form['btn'] == 'sign-out':
+            return render_template('index.html')
+            
 
     

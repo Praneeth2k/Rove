@@ -53,4 +53,11 @@
         <input type="submit" value="Submit" class="op1 btn btn-outline-primary" />
     </form>
     </div>
+    <script>
+        window.onload = myfunc();
+	function myfunc(){
+		option("{{ opt }}");
+		document.getElementById('so').style.display = "block";
+	}
+    </script>
 {% endblock %}
