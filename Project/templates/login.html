@@ -36,11 +36,11 @@
 
 
 	<div class="limiter">
-		<div class="container-login100 bg-narrow">
-			<div class="wrap-login100 p-t-70 p-b-10">
+		<div class="container-login100 bg-narrow" style = "background-color:#272727;">
+			<div class="wrap-login100 p-t-70 p-b-10" style = "background-color:#272727;">
 				<form action="/login" method="POST" class="login100-form validate-form">
 					{{ form.hidden_tag() }}
-					<span class="login100-form-title p-b-50">
+					<span class="login100-form-title p-b-50" style = "color:#6F2232">
 						Login
 					</span>
 					
@@ -48,22 +48,22 @@
 						<img src="static/images/logo.jpeg" alt="ROVE" width="150" height="50">
 					</span>
 					<h4 style = "color:crimson; font-family:cursive; font-size:1.2rem">{{ message }}</h4>
-					<div class="wrap-input100 validate-input m-t-25 m-b-50" >
+					<div class="form-group" >
 						
         				{{ wtf.form_field(form.username) }}
 						     
 					</div>
 
-					<div class="wrap-input100 validate-input m-b-50" >
+					<div class="form-group" >
 						{{ wtf.form_field(form.password) }}
 						
 					</div> 
-					<div class="wrap-input100 validate-input m-b-50" >
+					<div class="form-group" >
 						{{ wtf.form_field(form.remember) }}						
 					</div> 
 						
 					<div class="container-login100-form-btn">
-						<button type="submit" class="login100-form-btn">
+						<button type="submit" class="btn btn-outline-success">
 							Login
 						</button>
 					</div>

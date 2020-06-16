@@ -21,7 +21,7 @@
 		<div class="carousel-item active">
 			<img src="static/images/background.jpg">
 			<div class="carousel-caption">
-				<h1 class="display-2">Welcome to ROVE!!</h1>
+				<h1 class="display-2" style = "color:aqua">Welcome to ROVE!!</h1>
 				<button onclick="login()" type="button" class="btn btn-outline-light btn-lg">Log in</button>
 				<button onclick="signup()" type="button" class="btn btn-primary btn-lg">Sign up</button>
 			
@@ -35,14 +35,14 @@
 
 
 <!--- Welcome Section -->
-<div class="container-fluid padding">
+<div class="container-fluid padding" style = "color:aqua">
 	<div class="row welcome text-center">
 		<div class="col-12">
-			<h1 class="display-4">Built with ease</h1><hr>
+			<h1 class="display-4">Books scooters with ease</h1><hr>
 		</div>
 		
 		<div class="col-12">
-			<p class="lead">Built using</p>
+			<p class="lead">Follow these 3 simple steps</p>
 		</div>
 	 
 	</div>
@@ -52,23 +52,23 @@
 
 
 <!--- Three Column Section -->
-<div class="container-fluid padding">
+<div class="container-fluid padding" style = "color:aqua">
 <div class="row text-center padding">	
 	<div class="col-xs-12 col-md-6 col-lg-4">
-		<i class="fas  fa-code"></i></i>
-		<h3>HTML5</h3>
-		<p>Description</p>
+		<h2>Step 1</h2>
+		<h3>Book ride</h3>
+		<p>Select from and to locations</p>
 
 	</div>
 	<div class="col-xs-12 col-md-6 col-lg-4">
-		<i class="fas fa-bold"></i>
-		<h3>Bootstrap</h3>
-		<p>Description</p>
+		<h2>Step 2</h2>
+		<h3>Recieve OTP</h3>
+		<p>Enter the OTP into the scooter</p>
 	</div>
 	<div class="col-xs-12 col-md-4">
-		<i class="fab fa-css3"></i>
-		<h3>CSS</h3>	
-		<p>Description</p>
+		<h2>Step 3</h2>
+		<h3>Finish ride</h3>	
+		<p>Finish the ride</p>
 	</div>
 </div>
 
@@ -79,9 +79,9 @@
 <!--- Two Column Section -->
 <div class="container-fluid padding" id="about">
 	<div class="row padding">
-		<div class="col-lg-6">
+		<div class="col-lg-6" style = "color:aqua">
 			<h2>Details</h2>
-			<p style="font-size:20px">Rove is a two wheeler rental service in Bangalore. Riders will book a rental bike and pickup at their nearest station, ride to the destination and drop off there.</p>
+			<p style="font-size:20px" >Rove is a two wheeler rental service in Bangalore. Riders will book a rental bike and pickup at their nearest station, ride to the destination and drop off there.</p>
 			<br>
 				 
 
@@ -93,6 +93,12 @@
 </div>
 
 <hr class="my-4">
+<script>
+	window.onload = myfunc();
+	function myfunc(){
+		document.getElementById('flash').style.display = "none";
+	}
+</script>
 
 
 

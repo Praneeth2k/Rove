@@ -19,7 +19,7 @@ ENV = 'dev'
 if ENV == 'dev':
     app.debug = True
     app.config['SECRET_KEY'] = os.urandom(16)
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://postgres:spoo88#asA@localhost/rove'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://postgres:123@localhost/rove'
 else:
     app.debug = False
     app.config['SECRET_KEY'] = ''
@@ -154,11 +154,13 @@ def load_user(user_id):
 def index():
     return render_template('index.html')
 
+balance = 0
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     global locations 
     global loc
-
+    global balance
     form = LoginForm()
     
     if form.validate_on_submit():
@@ -240,7 +242,11 @@ def book():
         A = "A"
         res= db.session.execute('select wallet from "customer" where id= :fid',{"fid":current_user.id}).fetchone()
         balance=res[0]
+        if balance < cost:
+            flash(f'Balance insufficient! Please recharge your wallet.','warning')
         return render_template('book.html',from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, balance = balance, opt = 2)
+           
+
     if request.form['btn'] == "start ride":
         if request.form['otp'] == otp:
             return render_template('book.html',from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, opt = 4)
@@ -265,10 +271,16 @@ def book():
         db.session.commit()
         res = db.session.execute('SELECT wallet from "customer" where id = :id', {"id":current_user.id}).fetchone()
         balance = res[0]
+        if balance < cost:
+            flash(f'Balance insufficient! Please recharge your wallet.','warning')
         return render_template('book.html',from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, balance = balance, opt = 2)
 
     if request.form['btn'] == "Confirm Booking":
-        
+        res = db.session.execute('SELECT wallet from "customer" where id = :id', {"id":current_user.id}).fetchone()
+        balance = res[0]
+        if balance < cost:
+            flash(f'Balance insufficient! Please recharge your wallet.','warning')
+            return render_template('book.html',from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, balance = balance, opt = 2)
         n = datetime.now()
         res = db.session.execute('SELECT id from "location" where loc_name = :f',{"f":from_location}).fetchone()
         
@@ -290,7 +302,9 @@ def book():
         t = res[0]
         db.session.execute('INSERT into "ride"(vehicle_num, from_loc, to_loc, datentime, customer_id) values(:v, :f , :t, :tnc, :c)',{"v": vehicle_number, "f": fid, "t":t, "tnc":n ,"c":current_user.id})
         db.session.commit()
-        return render_template('book.html', from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, opt = 3, balance = balance)
+        res = db.session.execute('select model from "vehicle" where vehicle_number = :v ',{"v": vehicle_number}).fetchone()
+        model = res[0]
+        return render_template('book.html', from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, opt = 3, balance = balance, vn = vehicle_number, model = model)
        
         
     

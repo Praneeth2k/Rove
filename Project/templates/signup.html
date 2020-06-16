@@ -36,11 +36,11 @@
 {% block body %}
 
 	<div class="limiter">
-		<div class="container-login100">
-			<div class="wrap-login100 p-t-85 p-b-20">
+		<div class="container-login100" style = "background-color:#272727">
+			<div class="wrap-login100 p-t-85 p-b-20" style = "background-color:#272727;">
 				<form action='/signup' method="POST" class="login100-form validate-form">
 					{{ form.hidden_tag() }}
-					<span class="login100-form-title p-b-70">
+					<span class="login100-form-title p-b-30" style = "color:#6F2232">
 						Signup
 					</span>
 					<span class="login100-form-avatar">
@@ -50,7 +50,7 @@
 						<legend class="border-bottom mb-4">Join Today</legend>
 						<div class="form-group">
 							{{ form.name.label(class="form-control-label") }}
-							{{ form.name(class="form-control form-control-lg is-invalid") }}
+							{{ form.name(class="form-control form-control-lg is-valid") }}
 								
 						</div>
 						<div class="form-group">
@@ -63,7 +63,7 @@
 									{% endfor %}
 								</div>
 							{% else %}
-								{{ form.mobile(class="form-control form-control-lg") }}
+								{{ form.mobile(class="form-control form-control-lg is-valid") }}
 							{% endif %}
 						</div>
 						<div class="form-group">
@@ -76,7 +76,7 @@
 									{% endfor %}
 								</div>
 							{% else %}
-								{{ form.email(class="form-control form-control-lg") }}
+								{{ form.email(class="form-control form-control-lg is-valid") }}
 							{% endif %}
 						</div>
 						<div class="form-group">
@@ -90,21 +90,21 @@
 									{% endfor %}
 								</div>
 							{% else %}
-								{{ form.username(class="form-control form-control-lg") }}
+								{{ form.username(class="form-control form-control-lg is-valid") }}
 							{% endif %}
 						</div>
 						
 						<div class="form-group">
 							{{ form.password.label(class="form-control-label") }}
 							{% if form.password.errors %}
-								{{ form.password(class="form-control form-control-lg is-invalid") }}
+								{{ form.password(class="form-control form-control-lg is-valid") }}
 								<div class="invalid-feedback">
 									{% for error in form.password.errors %}
 										<span>{{ error }}</span>
 									{% endfor %}
 								</div>
 							{% else %}
-								{{ form.password(class="form-control form-control-lg") }}
+								{{ form.password(class="form-control form-control-lg is-valid") }}
 							{% endif %}
 						</div>
 						
@@ -118,7 +118,7 @@
 									{% endfor %}
 								</div>
 							{% else %}
-								{{ form.confirm_password(class="form-control form-control-lg") }}
+								{{ form.confirm_password(class="form-control form-control-lg is-valid") }}
 							{% endif %}
 						</div>
 					</fieldset>

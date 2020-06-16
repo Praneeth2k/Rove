@@ -7,12 +7,12 @@
 
     {% endblock %}
 </head>
-<body>
+<body style = "background-color:#272727; color:#C3073F">
 		
 	
 
 <!-- Navigation -->
-<nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">
+<nav class="navbar navbar-expand-md navbar-light bg-dark sticky-top">
 <div class="container-fluid">
 	<a class="navbar-brand" href="#"><img src="static/images/logo.jpeg" width="180" height="90"></a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
@@ -21,16 +21,16 @@
 	<div class="collapse navbar-collapse" id="navbarResponsive">
 		<ul class="navbar-nav ml-auto">
 			<li class="nav-item">
-				<a class="nav-link" id = 'i' onclick = "index()">Home</a>
+				<a class="nav-link" id = 'i' onclick = "index()" style = "color:white">Home</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" id = 'l' onclick = "login()">Login</a>
+				<a class="nav-link" id = 'l' onclick = "login()" style = "color:white">Login</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" id = 's' onclick = "signup()">Signup</a>
+				<a class="nav-link" id = 's' onclick = "signup()" style = "color:white">Signup</a>
 			</li>
 			<li class = "nav-item">
-				<a class="nav-link" id = 'so' onclick = "signout()" style = "display:none">Sign Out</a>
+				<a class="nav-link" id = 'so' onclick = "signout()" style = "color:white">Log Out</a>
 			</li>
 
 		</ul> 
@@ -40,7 +40,7 @@
 </div>
 </nav>
 
-<div class="row">
+<div id = "flash" class="row">
 	<div class="col-md-8">
 		{% with messages = get_flashed_messages(with_categories=true) %}
 		{% if messages %}
