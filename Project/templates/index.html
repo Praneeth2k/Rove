@@ -2,6 +2,7 @@
 
    {% block head %}
 	<title>Home</title>
+	<link rel="icon" type="image/png" href="static/images/icons/home1.jpg"/>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
@@ -38,7 +39,7 @@
 <div class="container-fluid padding" style = "color:aqua">
 	<div class="row welcome text-center">
 		<div class="col-12">
-			<h1 class="display-4">Books scooters with ease</h1><hr>
+			<h1 class="display-4">Books scooter with ease</h1><hr>
 		</div>
 		
 		<div class="col-12">
@@ -56,7 +57,7 @@
 <div class="row text-center padding">	
 	<div class="col-xs-12 col-md-6 col-lg-4">
 		<h2>Step 1</h2>
-		<h3>Book ride</h3>
+		<a href="{{url_for('book')}}"><h3>Book ride</h3></a>
 		<p>Select from and to locations</p>
 
 	</div>
@@ -81,7 +82,9 @@
 	<div class="row padding">
 		<div class="col-lg-6" style = "color:aqua">
 			<h2>Details</h2>
-			<p style="font-size:20px" >Rove is a two wheeler rental service in Bangalore. Riders will book a rental bike and pickup at their nearest station, ride to the destination and drop off there.</p>
+			<p style="font-size:20px" >Rove is a dockless two wheeler rental service. 
+				Riders will book a rental bike and pickup at their nearest station, ride to the destination and drop off there.
+			</p>
 			<br>
 				 
 

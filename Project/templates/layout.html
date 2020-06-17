@@ -21,18 +21,16 @@
 	<div class="collapse navbar-collapse" id="navbarResponsive">
 		<ul class="navbar-nav ml-auto">
 			<li class="nav-item">
-				<a class="nav-link" id = 'i' onclick = "index()" style = "color:white">Home</a>
+				<a class="nav-link" id = 'i' onclick = "index()"  href= "#" style = "color:white">Home</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" id = 'l' onclick = "login()" style = "color:white">Login</a>
+				<a class="nav-link" id = 'l' onclick = "login()" href= "#" style = "color:white">Login</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" id = 's' onclick = "signup()" style = "color:white">Signup</a>
+				<a class="nav-link" id = 's' onclick = "signup()" href= "#"  style = "color:white">Signup</a>
 			</li>
-			<li class = "nav-item">
-				<a class="nav-link" id = 'so' onclick = "signout()" style = "color:white">Log Out</a>
-			</li>
-
+			
+			{% block container %}{% endblock %}
 		</ul> 
 
 		
@@ -41,12 +39,12 @@
 </nav>
 
 <div id = "flash" class="row">
-	<div class="col-md-8">
+	<div class="col-xs-6 col-sm-4 col-md-12">
 		{% with messages = get_flashed_messages(with_categories=true) %}
 		{% if messages %}
 			{% for category, message in messages %}
 			<div class="alert alert-{{ category }}">
-				{{ message }}
+				<p style="text-align:center;">{{ message }}</p>
 			</div>
 			{% endfor %}
 		{% endif %}
@@ -69,7 +67,7 @@
 		location.href = "/signup";
 	}
 	function signout(){
-		location.href = "/";
+		location.href = "{{url_for('logout')}}";
 	}
 </script>
 
@@ -88,7 +86,7 @@
 		</div>
 		<div class="col-md-4" id="help">
 		<h2><span>Customer Care</span></h2>
-						E-mail:  <a href="mailto:help@example.com?Subject=Help" target="_top">help@rove.com</a><br>
+						E-mail:  <a href="mailto:roveapc.2020@gmail.com?Subject=help" target="_top">roveapc.2020@gmail.com</a><br>
 						Ph-No:   080-123-45688
 		</div>
 	</div>

@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 {% import "bootstrap/wtf.html" as wtf %}
 {% block head %}
-	<title>Log in</title>
+	<title>Reset Password</title>
 <!--===============================================================================================-->	
 	<link rel="icon" type="image/png" href="static/images/icons/login.ico"/>
 <!--===============================================================================================-->
@@ -39,10 +39,10 @@
 	<div class="limiter">
 		<div class="container-login100 bg-narrow" style = "background-color:#272727;">
 			<div class="wrap-login100 p-t-70 p-b-10" style = "background-color:#272727;">
-				<form action="/login" method="POST" class="login100-form validate-form">
+				<form action="" method="POST" class="login100-form validate-form">
 					{{ form.hidden_tag() }}
 					<span class="login100-form-title p-b-50" style = "color:#6F2232">
-						Login
+						Reset Password
 					</span>
 					
 					<span class="login100-form-avatar">
@@ -51,42 +51,17 @@
 					<h4 style = "color:crimson; font-family:cursive; font-size:1.2rem">{{ message }}</h4>
 					<div class="form-group" >
 						
-        				{{ wtf.form_field(form.username) }}
+        				{{ wtf.form_field(form.password) }}
+						     
+                    </div>
+                    <div class="form-group" >
+						
+        				{{ wtf.form_field(form.confirm_password) }}
 						     
 					</div>
-
-					<div class="form-group" >
-						{{ wtf.form_field(form.password) }}
-						
-					</div> 
-					<div class="form-group" >
-						{{ wtf.form_field(form.remember) }}						
-					</div> 
-					
-					<div class="container-login100-form-btn">
-						<button type="submit" class="btn btn-outline-success">
-							Login
-						</button>
-						
-						<a href="{{url_for('forgot')}}" style="padding: 1em " class="txt2" > forgot password </a>
-						
-							
+                    <div class="container-login100-form-btn">
+						{{form.submit(class="btn btn-outline-info")}}
 					</div>
-					
-				
-
-					<ul class="login-more p-t-100">
-
-						<li>
-							<span class="txt1">
-								Don’t have an account?
-							</span>
-
-							<a onclick = 'signup()' href="#" class="txt2">
-								Sign up
-							</a>
-						</li>
-					</ul>
 				</form>
 			</div>
 		</div>
