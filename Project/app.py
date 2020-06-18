@@ -288,7 +288,7 @@ cost = 0
 dist = 0.0
 vehicle_number = "KA"
 otp=0000
-
+model=""
 @app.route("/book", methods=['GET','POST'])
 @login_required
 def book():
@@ -298,6 +298,7 @@ def book():
     global cost
     global dist
     global vehicle_number
+    global model
     global otp
     global n
     A = "A"
@@ -332,7 +333,9 @@ def book():
             if request.form['otp'] == otp:
                 return render_template('book.html',from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, opt = 4)
             else:
-                return render_template('book.html',from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, opt = 3, mesg = "wrong OTP, try again")
+                res= db.session.execute('select wallet from "customer" where id= :fid',{"fid":current_user.id}).fetchone()
+                balance=res[0]
+                return render_template('book.html',from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, opt = 3, balance = balance, vn = vehicle_number, model = model, mesg = "wrong OTP, try again")
 
         if request.form['btn'] == "Add money":
             
@@ -397,25 +400,28 @@ def book():
             db.session.execute('UPDATE "vehicle" set status = :A, address = :to , curr_user= :Q  where vehicle_number = :v',{"A": A,"to": to_location_id,"Q":None ,"v": vehicle_number})
             db.session.execute('UPDATE "customer" set wallet = wallet - :cost where id = :cust_id ',{"cust_id":current_user.id, "cost":cost})
             db.session.commit()
-            return render_template("feedback.html")
-                
+            return redirect (url_for('feedback'))               
     res = db.session.execute('SELECT wallet from "customer" where id = :id', {"id":current_user.id}).fetchone()
     balance = res[0]
     return render_template('book.html', locations = locations, loc = loc, balance = balance, opt = 1)
              
     
-@app.route("/feedback", methods=["POST"])
+@app.route("/feedback", methods=["GET","POST"])
 @login_required
 def feedback():
-    rating = request.form['rating']
-    comments = request.form['comments']
-    isi = db.session.execute('select id from "ride" where datentime = :t',{"t":n}).fetchone()
-    idn = isi[0]
-    db.session.execute('INSERT into "ratings"(id, rating, feedback) values(:v, :r, :com)',{"v":idn, "r":rating, "com":comments})
-    db.session.commit()
-    return render_template("done.html", opt = 1)
+    
+    if request.method == "POST":
+        if request.form['btn'] == 'Submit':
+            rating = request.form['rating']
+            comments = request.form['comments']
+            isi = db.session.execute('select id from "ride" where datentime = :t',{"t":n}).fetchone()
+            idn = isi[0]
+            db.session.execute('INSERT into "ratings"(id, rating, feedback) values(:v, :r, :com)',{"v":idn, "r":rating, "com":comments})
+            db.session.commit()
+            return redirect(url_for('done'))
+    return render_template("feedback.html")
 
-@app.route("/done", methods = ["POST"])
+@app.route("/done", methods = ["GET","POST"])
 @login_required
 def done():
     if request.method == "POST":
@@ -432,13 +438,7 @@ def done():
 
         if request.form['btn'] == 'sign-out':
             return redirect(url_for('logout'))
+    return render_template("done.html", opt = 1)
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-'''A = "A"
-                locations = db.session.execute('SELECT distinct loc_name FROM "location" as l,"vehicle" as v where l.id = v.address and v.status=:A',{"A":A}).fetchall()
-                loc = db.session.execute('SELECT loc_name FROM "location" ').fetchall()
-                res = db.session.execute('SELECT wallet from "customer" where id = :id', {"id":current_user.id}).fetchone()
-                balance = res[0]
-                return render_template('book.html', locations = locations, loc = loc, balance = balance, opt = 1)'''   

@@ -87,8 +87,8 @@
 						</marquee>
 						
 						<div class = "op1">Distance : {{ dist }} Km &ensp; Cost : {{ cost }} Rs </div>
-						<h4 class = "op1 op2 op4">Vehicle Number : {{ vn }}</h4>
-						<h4 class = "op1 op2 op4">Model: {{ model }}</h4><br>
+						
+						
 						<div class = "op1 op2 op4" style = "color: rgb(255, 85, 85); font-family: helvetica;">An OTP has beeen sent to your mail. Kindly check </div>
 						<h3 class = "op1 op2 op4">{{ mesg }}</h3>
 						<div class = "op1 op2 op4" style = "color:rgba(105, 255, 85, 0.993); font-family:Georgia; font-size: 1.4em;">Enter the otp here:  <input width="4px" type = "text" name = "otp" placeholder = "Enter 4 digit OTP"></div>
@@ -116,10 +116,22 @@
 			
 	</form>
 </div>
-	
-	<div class="col-md-6">
-		<img src="static/images/maxresdefault.jpg" class="img-fluid">
+<div class="container-fluid padding" id="about">
+	<div class="row padding">
+		<div class="col-lg-6" style = "color:aqua">
+			<h1 class = "op1 op2 op4">Details : </h1>
+			<h2 class = "op1 op2 op4">Vehicle Number : {{ vn }}</h4><br>
+			<h2 class = "op1 op2 op4">Model: {{ model }}</h2><br>
+			<br>
+				 
+
+		</div>
+		<div class="op1 op2 op4 col-md-6">
+			<img src="static/images/{{ vn }}.jpg" class="img-fluid" alt="{{model}}" >
+		</div>
 	</div>
+</div>	
+	
 
 
 
