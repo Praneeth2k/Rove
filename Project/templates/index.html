@@ -1,7 +1,8 @@
 {% extends 'layout.html' %}
 
-   {% block head %}
+{% block head %}
 	<title>Home</title>
+	<meta id="option" data-name="{{ opt }}">
 	<link rel="icon" type="image/png" href="static/images/icons/home1.jpg"/>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -9,7 +10,19 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 	<script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
 	<link href="static/style.css" rel="stylesheet">
-   {% endblock %}
+{% endblock %}
+
+{% block container %}
+   	<li class="nav-item">
+		<a class="nav-link" id = 'l'  href= "{{url_for('login')}}" style = "color:white">Login</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" id = 's'  href= "{{url_for('signup')}}"  style = "color:white">Signup</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" id = 'i'   href= "#" style = "color:white">About</a>
+	</li>
+{% endblock %}
 
 {% block body %}
 <!--- Image Slider -->
@@ -23,8 +36,13 @@
 			<img src="static/images/background.jpg">
 			<div class="carousel-caption">
 				<h1 class="display-2" style = "color:aqua">Welcome to ROVE!!</h1>
-				<button onclick="login()" type="button" class="btn btn-outline-light btn-lg">Log in</button>
-				<button onclick="signup()" type="button" class="btn btn-primary btn-lg">Sign up</button>
+				<div class = "op1">
+					<button onclick="login()" type="button" class="btn btn-outline-light btn-lg">Log in</button>
+					<button onclick="signup()" type="button" class="btn btn-primary btn-lg">Sign up</button>
+				</div>
+				<div class ="op2">
+					<button onclick="book()" type="button" class="btn btn-primary btn-lg">Book Ride</button>
+				</div>
 			
 			</div>
 		</div>
@@ -54,25 +72,24 @@
 
 <!--- Three Column Section -->
 <div class="container-fluid padding" style = "color:aqua">
-<div class="row text-center padding">	
-	<div class="col-xs-12 col-md-6 col-lg-4">
-		<h2>Step 1</h2>
-		<a href="{{url_for('book')}}"><h3>Book ride</h3></a>
-		<p>Select from and to locations</p>
+	<div class="row text-center padding">	
+		<div class="col-xs-12 col-md-6 col-lg-4">
+			<h2>Step 1</h2>
+			<h3>Book ride</h3>
+			<p>Select from and to locations</p>
 
+		</div>
+		<div class="col-xs-12 col-md-6 col-lg-4">
+			<h2>Step 2</h2>
+			<h3>Recieve OTP</h3>
+			<p>Enter the OTP into the scooter</p>
+		</div>
+		<div class="col-xs-12 col-md-4">
+			<h2>Step 3</h2>
+			<h3>Finish ride</h3>	
+			<p>Finish the ride</p>
+		</div>
 	</div>
-	<div class="col-xs-12 col-md-6 col-lg-4">
-		<h2>Step 2</h2>
-		<h3>Recieve OTP</h3>
-		<p>Enter the OTP into the scooter</p>
-	</div>
-	<div class="col-xs-12 col-md-4">
-		<h2>Step 3</h2>
-		<h3>Finish ride</h3>	
-		<p>Finish the ride</p>
-	</div>
-</div>
-
 </div>
 
 <hr class="my-4">
@@ -99,12 +116,36 @@
 <script>
 	window.onload = myfunc();
 	function myfunc(){
+		option("{{ opt }}");
 		document.getElementById('flash').style.display = "none";
 	}
+	
+
+	
+	function option(opt){
+		if (opt == 1){
+			func1();
+		}
+		
+		else if(opt == 2){
+			func2();
+		}
+	
+	}
+	function func1(){
+		var x = document.getElementsByClassName("op1");
+		for (var i = 0; i < x.length; i++){
+			x[i].style.display = "none";
+		}
+		
+	}
+	function func2(){
+		var y = document.getElementsByClassName("op2");
+		for (i = 0; i < y.length; i++){
+			y[i].style.display = "none";
+		}
+	}
 </script>
-
-
-
 {% endblock %}
 
 

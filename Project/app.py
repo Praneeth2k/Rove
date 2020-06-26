@@ -72,7 +72,7 @@ class Customer(db.Model):
     email=db.Column(db.String(40),unique = True)
     wallet = db.Column(db.Integer,default=0)
 
-    def __init__(self,id,name, mobile ,email,):
+    def __init__(self,id,name, mobile ,email):
         self.id = id  
         self.name = name
         self.mobile = mobile
@@ -132,7 +132,7 @@ class Rating(db.Model):
     feedback = db.Column(db.String)
 
     def __init__(self, ride_id , rating, feedback):
-        self.ride_id = ride_id
+        self.id = ride_id
         self.rating = rating
         self.feedback = feedback
 
@@ -176,7 +176,15 @@ def load_user(user_id):
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    if current_user.is_authenticated:
+        return render_template('index.html',opt=1)
+
+    return render_template('index.html',opt=2)
+
+
+
+
+
 
 balance = 0
 
@@ -184,7 +192,8 @@ balance = 0
 def login():
     
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        flash(f'Logged in as {current_user.username} ','success')
+        return redirect(url_for('book'))
 
     form = LoginForm()
     
@@ -192,9 +201,9 @@ def login():
         user = User.query.filter_by(username=form.username.data).first()
         if user:
             if check_password_hash(user.password, form.password.data):
-                form.remember.data 
-                login_user(user, remember = form.remember.data )
-                print(form.remember.data)
+                
+                login_user(user, remember = form.remember.data)
+               
                 return redirect(url_for('book'))
             flash('Invalid Password ','warning')
             return render_template('login.html', form=form)
@@ -206,7 +215,9 @@ def login():
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if current_user.is_authenticated:
+        flash('Already Signed In .Press Log In to continue','info')
         return redirect(url_for('index'))
+         
 
     form = RegisterForm()
     fi="Username already in use."
@@ -271,7 +282,7 @@ def reset(token):
         user.password = hashed_password
         db.session.commit()
         flash('Your password has been updated! You can Log in', 'success')
-        return redirect(url_for('login'))
+        return render_template('success.html',message = user.username)
     return render_template('reset_token.html', form=form)
 
 @app.route('/logout')
@@ -313,12 +324,16 @@ def book():
             t = request.form['to']
             to_location = t
             print(from_location)
-            res = db.session.execute('SELECT x_coordinate, y_coordinate FROM "location" where loc_name =:from ',{"from":f}).fetchone()
-            x1 = res[0]
-            y1 = res[1]
-            res = db.session.execute('SELECT x_coordinate, y_coordinate FROM "location" where loc_name =:to ',{"to":t}).fetchone()
-            x2 = res[0]
-            y2 = res[1]
+            try:
+                res = db.session.execute('SELECT x_coordinate, y_coordinate FROM "location" where loc_name =:from ',{"from":f}).fetchone()
+                x1 = res[0]
+                y1 = res[1]
+                res = db.session.execute('SELECT x_coordinate, y_coordinate FROM "location" where loc_name =:to ',{"to":t}).fetchone()
+                x2 = res[0]
+                y2 = res[1]
+            except:
+                flash('Please select From and TO locations','danger')
+                return redirect(url_for('book'))
             dist = round((math.sqrt((x1-x2)**2 + (y1-y2)**2)), 2)
             cost = int(dist * 3)
             A = "A"
@@ -326,16 +341,16 @@ def book():
             balance=res[0]
             if balance < cost:
                 flash(f'Balance insufficient! Please recharge your wallet.','danger')
-            return render_template('book.html',from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, balance = balance, opt = 2)
+            return render_template('book.html',from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, balance = balance, opt = 2,username=current_user.username)
             
 
         if request.form['btn'] == "start ride":
             if request.form['otp'] == otp:
-                return render_template('book.html',from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, opt = 4)
+                return render_template('book.html',from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, opt = 4,username=current_user.username)
             else:
                 res= db.session.execute('select wallet from "customer" where id= :fid',{"fid":current_user.id}).fetchone()
                 balance=res[0]
-                return render_template('book.html',from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, opt = 3, balance = balance, vn = vehicle_number, model = model, mesg = "wrong OTP, try again")
+                return render_template('book.html',from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, opt = 3, balance = balance, vn = vehicle_number, model = model, mesg = "wrong OTP, try again",username=current_user.username)
 
         if request.form['btn'] == "Add money":
             
@@ -345,7 +360,7 @@ def book():
             db.session.commit()
             res = db.session.execute('SELECT wallet from "customer" where id = :id', {"id":current_user.id}).fetchone()
             balance = res[0]
-            return render_template('book.html', locations = locations, loc = loc, balance = balance, opt = 1)
+            return render_template('book.html', locations = locations, loc = loc, balance = balance, opt = 1,username=current_user.username)
 
         if request.form['btn'] == "Add money ":
             
@@ -357,14 +372,14 @@ def book():
             balance = res[0]
             if balance < cost:
                 flash(f'Balance insufficient! Please recharge your wallet.','warning')
-            return render_template('book.html',from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, balance = balance, opt = 2)
+            return render_template('book.html',from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, balance = balance, opt = 2,username=current_user.username)
 
         if request.form['btn'] == "Confirm Booking":
             res = db.session.execute('SELECT wallet from "customer" where id = :id', {"id":current_user.id}).fetchone()
             balance = res[0]
             if balance < cost:
                 flash(f'Balance insufficient! Please recharge your wallet.','warning')
-                return render_template('book.html',from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, balance = balance, opt = 2)
+                return render_template('book.html',from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, balance = balance, opt = 2,username=current_user.username)
             n = datetime.now()
             res = db.session.execute('SELECT id from "location" where loc_name = :f',{"f":from_location}).fetchone()
             
@@ -390,7 +405,7 @@ def book():
             db.session.commit()
             res = db.session.execute('select model from "vehicle" where vehicle_number = :v ',{"v": vehicle_number}).fetchone()
             model = res[0]
-            return render_template('book.html', from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, opt = 3, balance = balance, vn = vehicle_number, model = model)
+            return render_template('book.html', from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, opt = 3, balance = balance, vn = vehicle_number, model = model,username=current_user.username)
         
         
         if request.form['btn'] == "finish ride":
@@ -403,7 +418,7 @@ def book():
             return redirect (url_for('feedback'))               
     res = db.session.execute('SELECT wallet from "customer" where id = :id', {"id":current_user.id}).fetchone()
     balance = res[0]
-    return render_template('book.html', locations = locations, loc = loc, balance = balance, opt = 1)
+    return render_template('book.html', locations = locations, loc = loc, balance = balance, opt = 1,username=current_user.username)
              
     
 @app.route("/feedback", methods=["GET","POST"])

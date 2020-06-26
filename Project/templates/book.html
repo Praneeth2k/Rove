@@ -30,10 +30,22 @@
 <!--===============================================================================================-->
 {% endblock %}
 {% block container %}
-<li class = "nav-item">
-	<a class="nav-link" id = 'so' onclick = "signout()" href= "#" style = "color:white">Log Out</a>
-</li>
+
+	
+	
+	<li class="nav-item">
+		<li class="dropdown">
+			<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+			<img src="static/images/{{username}}.jpg"  alt="Image" height="30" width="30" class="profile-image img-circle"> {{username}} <b class="caret"></b></a>
+			<ul class="dropdown-menu">                                                                                                                                                                                                          m
+				<li><a href="#"><i class="fa fa-cog"></i> Account</a></li>
+				<li class="divider"></li>
+				<li><a href="{{url_for('logout')}}"><i class="fa fa-sign-out"></i> Sign-out</a></li>
+			</ul>
+		</li>
+	</li>
 {% endblock %}
+
 {% block body %}
 <h5 style="padding: 1em;" class = "op1">Please wear your helmet and take care of the vehicle like it's your own</h5>
 <div style = "padding-top: 4em; padding-bottom: 12em; padding-left: 2em; padding-right: 2em;">	
