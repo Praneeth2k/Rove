@@ -36,11 +36,11 @@
 	<li class="nav-item">
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-			<img src="static/images/{{username}}.jpg"  alt="Image" height="30" width="30" class="profile-image img-circle"> {{username}} <b class="caret"></b></a>
-			<ul class="dropdown-menu">                                                                                                                                                                                                          m
-				<li><a href="#"><i class="fa fa-cog"></i> Account</a></li>
+			<img src="static/images/{{username}}.jpg"  alt="Image" onerror=this.src="static/images/emptydp.png" height="30" width="30" class="profile-image img-circle"></t><b class="caret" style = "padding-left: 7px;">{{username}}</b></a>
+			<ul class="dropdown-menu" style = "background-color:rgb(250, 232, 209); list-style: none;">                                                                                                                                                                                                          
+				<li><a href="#">&ensp;<i class="fa fa-cog"></i> &nbsp;Account</a></li>
 				<li class="divider"></li>
-				<li><a href="{{url_for('logout')}}"><i class="fa fa-sign-out"></i> Sign-out</a></li>
+				<li><a href="{{url_for('logout')}}">&ensp;<i class="fa fa-sign-out"></i> &nbsp;Sign-out</a></li>
 			</ul>
 		</li>
 	</li>
@@ -48,7 +48,7 @@
 
 {% block body %}
 <h5 style="padding: 1em;" class = "op1">Please wear your helmet and take care of the vehicle like it's your own</h5>
-<div style = "padding-top: 4em; padding-bottom: 12em; padding-left: 2em; padding-right: 2em;">	
+<div style = "padding-top: 0.5em; padding-bottom: 0.5em; padding-left: 0em; padding-right: 0em;">	
 	<form action='/book' method="POST" style = "display:inline;">
 		<div>
 			<div class = 'container'>
@@ -88,7 +88,7 @@
 							<input type="submit" class = "btn btn-outline-primary" name ="btn" value="book ride">
 						</div>
 					  </div>
-					  <div class = "col-lg-8 col-xl-8 op1" style = "color: cadetblue; font-family:monospace, Courier, monospace; font-size: 1.5em; ">
+					  <div class = "col-lg-8 col-xl-8 op1" style = "color: cadetblue; font-family:monospace, Courier, monospace; font-size: 1.5em; text-align: left;">
 						<h3 class = "op1" id = "info">From {{ from_loc }} to {{ to_loc }}</h3>
 						
 						<marquee width = 70% class = "op1 op2 op3" id = "marq"
@@ -103,13 +103,13 @@
 						
 						<div class = "op1 op2 op4" style = "color: rgb(255, 85, 85); font-family: helvetica;">An OTP has beeen sent to your mail. Kindly check </div>
 						<h3 class = "op1 op2 op4">{{ mesg }}</h3>
-						<div class = "op1 op2 op4" style = "color:rgba(105, 255, 85, 0.993); font-family:Georgia; font-size: 1.4em;">Enter the otp here:  <input width="4px" type = "text" name = "otp" placeholder = "Enter 4 digit OTP"></div>
+						<div class = "op1 op2 op4" style = "color:rgba(105, 255, 85, 0.993); font-family:Georgia; font-size: 1.4em;">Enter the otp here:  <input size="4" maxlength="4" height = "1" type = "text" name = "otp"></div>
 						<br><br>
 						<input class ="op1 op3 op4 btn btn-outline-primary op4" style = "font-family:Arial" id="foo" type="submit" name="btn" value="Confirm Booking">
 						<input class ="op1 op2 op4 btn btn-outline-primary op4" type="submit" id="moo" name = "btn" value = "start ride">
 						<input class ="op1 op2 op3 btn btn-outline-primary" type="submit" id="doo" name = "btn" value = "finish ride">
 					  </div>
-					  <div class = "balance col-lg-4 col-xl-4 op4" id = "cash" style = "border-radius: 25px; background:rgb(255, 85, 85); width:fit-content; height:fit-content;">
+					  <div class = "balance col-lg-4 col-xl-4 op4" id = "cash" style = "border-radius: 25px; background:rgb(255, 85, 85); width:fit-content; height:fit-content; align-content: center;">
 						<h3 id = "wallet" style = "font-size:1rem; color: antiquewhite;">Your remaining balance is: Rs {{ balance }}</h3>
 						<button onclick="add_money()" type="button" class="btn btn-info btn-sm" id = "Add money">Add money</button><br>
 						
@@ -118,11 +118,6 @@
 						<input style = "display:none" id = "add 2" type = "submit" class="btn btn-info btn-sm op1" name = "btn" value ="Add money ">
 					  </div>
 				</div>
-				<br><br><br>
-
-				<br>
-				
-			
 			</div>
 		</div>
 			
@@ -131,14 +126,11 @@
 <div class="container-fluid padding" id="about">
 	<div class="row padding">
 		<div class="col-lg-6" style = "color:aqua">
-			<h1 class = "op1 op2 op4">Details : </h1>
-			<h2 class = "op1 op2 op4">Vehicle Number : {{ vn }}</h4><br>
-			<h2 class = "op1 op2 op4">Model: {{ model }}</h2><br>
-			<br>
-				 
-
+			<h2 class = "op1 op2 op4">Details : </h2>
+			<h3 class = "op1 op2 op4">Vehicle Number : {{ vn }}</h3>
+			<h3 class = "op1 op2 op4">Model: {{ model }}</h3><br>
 		</div>
-		<div class="op1 op2 op4 col-md-6">
+		<div class="op1 op2 op4 col-md-6 col-lg-6">
 			<img src="static/images/{{ vn }}.jpg" class="img-fluid" alt="{{model}}" >
 		</div>
 	</div>

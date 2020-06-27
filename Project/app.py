@@ -20,7 +20,7 @@ ENV = 'dev'
 if ENV == 'dev':
     app.debug = True
     app.config['SECRET_KEY'] = os.urandom(16)
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://postgres:spoo88#asA@localhost/rove'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://postgres:123@localhost/rove'
 else:
     app.debug = False
     app.config['SECRET_KEY'] = ''

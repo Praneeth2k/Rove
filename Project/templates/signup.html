@@ -27,6 +27,21 @@
 <!--===============================================================================================-->
 	{% endblock %}
 
+	{% block container %}
+	<li class="nav-item">
+		<a class="nav-link" id = 'l'  href= "{{url_for('index')}}" style = "color:white">Index</a>
+	</li>
+   	<li class="nav-item">
+		<a class="nav-link" id = 'l'  href= "{{url_for('login')}}" style = "color:white;">Login</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" id = 's'  href= "{{url_for('signup')}}"  style = "color:white"><b>Signup</b></a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" id = 'i'   href= "#" style = "color:white">About</a>
+	</li>
+{% endblock %}
+
 
 
 
@@ -38,10 +53,10 @@
 
 	<div class="limiter">
 		<div class="container-login100" style = "background-color:#272727">
-			<div class="wrap-login100 p-t-85 p-b-20" style = "background-color:#272727;">
+			<div class="wrap-login100 p-t-0 p-b-20" style = "background-color:#272727;">
 				<form action='/signup' method="POST" class="login100-form validate-form">
 					{{ form.hidden_tag() }}
-					<span class="login100-form-title p-b-30" style = "color:#6F2232">
+					<span class="login100-form-title p-b-20" style = "color:#6F2232">
 						Signup
 					</span>
 					<span class="login100-form-avatar">
@@ -129,7 +144,7 @@
 					</div>
 					
  
-					<ul class="login-more p-t-190">
+					<ul class="login-more p-t-30">
 						<li>
 							<span class="txt1">
 								Already have an account?
