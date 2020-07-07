@@ -1,16 +1,20 @@
-from flask import Flask, render_template, request,redirect, url_for, flash
+from flask import Flask, render_template, request,redirect, url_for, flash,send_file
 from flask_bootstrap import Bootstrap
 from flask_mail import Mail, Message
 from flask_sqlalchemy import SQLAlchemy
-from form import RegisterForm, LoginForm, EmailForm, ResetPasswordForm
+from form import RegisterForm, LoginForm, EmailForm, ResetPasswordForm,UploadForm,UpdateProfile
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from werkzeug.utils import secure_filename
+from flask_uploads import UploadSet,configure_uploads,IMAGES
 import os 
+from io import BytesIO
+
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from datetime import datetime 
 import math, random
 
-mail=Mail()
+
 app = Flask(__name__)
 
 
@@ -20,29 +24,38 @@ ENV = 'dev'
 if ENV == 'dev':
     app.debug = True
     app.config['SECRET_KEY'] = os.urandom(16)
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://postgres:123@localhost/rove'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://postgres:spoo88#asA@localhost/rove'
+    app.config['DEBUG'] = True
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 else:
     app.debug = False
     app.config['SECRET_KEY'] = ''
     app.config['SQLALCHEMY_DATABASE_URI'] = ''
 
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['UPLOADS_DEFAULT_DEST']='static/images/uploads'
+
+
 app.config['MAIL_SERVER']='smtp.gmail.com'
-app.config['DEBUG'] = True
 app.config['MAIL_PORT'] = 465
 app.config['MAIL_USERNAME'] = 'roveapc.2020@gmail.com'
 app.config['MAIL_PASSWORD'] = '@cademic123'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 
+
+
 bootstrap = Bootstrap(app)
 db= SQLAlchemy(app)
+mail=Mail(app)
 
-mail.init_app(app)
+pics = UploadSet('pics',IMAGES)
+configure_uploads(app,pics)
 
-login_manager = LoginManager()
+
+login_manager = LoginManager() 
 login_manager.init_app(app)
 login_manager.login_view = 'login'
+
 
 
 class User(UserMixin,db.Model):
@@ -71,12 +84,14 @@ class Customer(db.Model):
     mobile = db.Column(db.BigInteger,unique = True)
     email=db.Column(db.String(40),unique = True)
     wallet = db.Column(db.Integer,default=0)
+ 
 
     def __init__(self,id,name, mobile ,email):
         self.id = id  
         self.name = name
         self.mobile = mobile
         self.email = email
+        
     
     
 
@@ -147,6 +162,22 @@ class Complaint(db.Model):
         self.ride_id = ride_id
         self.complaint = complaint
 
+class Picture(db.Model):
+    __tablename__="customer_License"
+    id=db.Column(db.Integer,db.ForeignKey('customer.id'),primary_key=True)
+    License=db.Column(db.LargeBinary)
+                                            
+    def __init__(self,customer_id,License):
+        self.id=customer_id
+        self.License=License
+class Propic(db.Model):
+    __tablename__="profile"
+    id=db.Column(db.Integer,db.ForeignKey('customer.id'),primary_key=True)
+    pic_url=db.Column(db.String(256))
+
+    def __init__(self,customer_id,pic_url):
+        self.id=customer_id
+        self.pic_url=pic_url
 
 def generateOTP():
     digits = "0123456789"
@@ -181,11 +212,6 @@ def index():
 
     return render_template('index.html',opt=2)
 
-
-
-
-
-
 balance = 0
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -212,27 +238,25 @@ def login():
     
     return render_template('login.html', form=form)
   
-@app.route('/signup', methods=['GET', 'POST'])
+@app.route('/signup', methods=['GET','POST'])
 def signup():
     if current_user.is_authenticated:
         flash('Already Signed In .Press Log In to continue','info')
         return redirect(url_for('index'))
-         
-
     form = RegisterForm()
     fi="Username already in use."
+    
     if form.validate_on_submit():
-        
         hashed_password = generate_password_hash(form.password.data, method='sha256')
         try :
             new_user = User(username=form.username.data, password=hashed_password)
             db.session.add(new_user)
             db.session.commit()
-            
             try :
                 new_customer = Customer(id=new_user.id ,name=form.name.data, mobile= int(form.mobile.data),email=form.email.data)
                 db.session.add(new_customer)
                 db.session.commit()
+                
             except:
                 fi=""
                 flash('Mobile or Email already in use.','warning')
@@ -242,9 +266,38 @@ def signup():
         except:
             flash(f'{fi} Failed to create an Account .Create Account again !!','danger')
             return redirect(url_for('signup'))
-        flash(f'Account created for {form.name.data}  Please Login !','success')
-        return redirect(url_for('login'))
+        flash('Upload Your two Wheeler License and continue','info')
+        return redirect(url_for('DL',name=form.name.data))
     return render_template('signup.html',form=form)
+
+@app.route('/DL:<name>',methods=['GET','POST'])
+def DL(name):
+    form= UploadForm()
+    if form.validate_on_submit():
+        customer= Customer.query.filter_by(name=name).first()
+        if customer is None :
+            flash('No customer with this name','warning')
+            return redirect(url_for('signup'))
+       
+        try:
+            files = form.license.data
+            
+            picture=Picture(customer_id=customer.id,License=files.read())
+            db.session.add(picture)
+            uril="https://static.wixstatic.com/media/cd5c35_e4e3005990ea4a879a280fd6dfe3bdbf~mv2.jpg/v1/fill/w_312,h_318,al_c,q_80,usm_0.66_1.00_0.01/empty-dp.webp"
+            newprofile = Propic(customer_id=customer.id,pic_url=uril)
+            db.session.add(newprofile)
+            db.session.commit()
+        except:
+            flash('couldnt insert license','danger')
+            db.session.execute('delete from "customer" where id= :ids',{"ids":customer.id})
+            db.session.execute('DELETE from "User_login" where id = :ids',{"ids":customer.id})
+            db.session.execute('DELETE from "profile" where id= : ids',{"ids":customer.id})
+            db.session.commit()
+            return redirect(url_for('signup'))
+        flash(f'Account created for {name}  Please Login !','success')
+        return redirect(url_for('login'))
+    return render_template("imageupload.html",form=form)
 
 @app.route('/resetpassword', methods=['GET','POST'])
 def forgot():
@@ -263,9 +316,41 @@ def forgot():
         return redirect(url_for('login'))
     return render_template('reset_request.html', form=form)
 
+
     
 
+@app.route('/download',methods=['GET','POST'])
+@login_required
+def download():
+    mylicense=Picture.query.filter_by(id=current_user.id).first()
+    return send_file(BytesIO(mylicense.License),attachment_filename=f'{current_user.username} License.jpeg' ,as_attachment=True)
 
+@app.route('/profile',methods=['GET','POST'])
+@login_required
+def profile():
+    
+    myprofile = db.session.execute('select u.username,c.name,c.mobile,c.email,c.wallet from "User_login" as u, customer as c where c.id=u.id and c.id=:ids',{"ids":current_user.id}).fetchone()
+    history=db.session.execute('select r.vehicle_num, v.model, l1.loc_name as from, l2.loc_name as to, r.datentime from ride as r ,location  as l1,location as l2,vehicle as v where r.vehicle_num=v.vehicle_number and r.from_loc=l1.id and r.to_loc=l2.id and customer_id =:ids',{"ids":current_user.id}).fetchall() 
+    url=db.session.execute('select pic_url from profile where id=:ids',{"ids":current_user.id}).fetchone() 
+    return render_template('profile.html',myprofile=myprofile,history=history,profileurl=url[0])
+
+
+@app.route('/update',methods=["GET","POST"])
+@login_required
+def update():
+    form = UpdateProfile()
+    if form.validate_on_submit():
+        filename=secure_filename(pics.save(form.pic.data))
+        filename_url=pics.url(filename)
+        
+        
+        f"filename = {filename_url}"
+        db.session.execute('UPDATE profile set pic_url=:url where id=:ids',{"url":filename_url,"ids":current_user.id})
+        db.session.commit()
+        flash('Photo Updated Successfully','info')
+        return redirect(url_for('profile'))
+    return render_template('profileupdate.html',form=form)
+    
 
 @app.route('/resetpassword/<token>',methods=['GET','POST'])
 def reset(token):
@@ -300,6 +385,7 @@ dist = 0.0
 vehicle_number = "KA"
 otp=0000
 model=""
+url=""
 @app.route("/book", methods=['GET','POST'])
 @login_required
 def book():
@@ -312,9 +398,12 @@ def book():
     global model
     global otp
     global n
+    global url
+    
     A = "A"
     locations = db.session.execute('SELECT distinct loc_name FROM "location" as l,"vehicle" as v where l.id = v.address and v.status=:A',{"A":A}).fetchall()
     loc = db.session.execute('SELECT loc_name FROM "location" ').fetchall()
+    url=db.session.execute('select pic_url from profile where id=:ids',{"ids":current_user.id}).fetchone() 
     if request.method == "POST":
 
         if request.form['btn'] == "book ride":
@@ -341,45 +430,54 @@ def book():
             balance=res[0]
             if balance < cost:
                 flash(f'Balance insufficient! Please recharge your wallet.','danger')
-            return render_template('book.html',from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, balance = balance, opt = 2,username=current_user.username)
+            return render_template('book.html',from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, balance = balance, opt = 2,username=current_user.username,profileurl=url[0])
             
 
         if request.form['btn'] == "start ride":
             if request.form['otp'] == otp:
-                return render_template('book.html',from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, opt = 4,username=current_user.username)
+                return render_template('book.html',from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, opt = 4,username=current_user.username,profileurl=url[0])
             else:
                 res= db.session.execute('select wallet from "customer" where id= :fid',{"fid":current_user.id}).fetchone()
                 balance=res[0]
-                return render_template('book.html',from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, opt = 3, balance = balance, vn = vehicle_number, model = model, mesg = "wrong OTP, try again",username=current_user.username)
+                return render_template('book.html',from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, opt = 3, balance = balance, vn = vehicle_number, model = model, mesg = "wrong OTP, try again",username=current_user.username,profileurl=url[0])
 
         if request.form['btn'] == "Add money":
             
             amount = request.form['amount']
+            try:
+                db.session.execute('UPDATE "customer" set wallet = wallet + :amt where id = :id',{"amt":amount, "id":current_user.id})
+                db.session.commit()
+                res = db.session.execute('SELECT wallet from "customer" where id = :id', {"id":current_user.id}).fetchone()
+                balance = res[0]
+            except:
+                flash('Invalid Amount ','danger')
+                return redirect(url_for('book'))
             
-            db.session.execute('UPDATE "customer" set wallet = wallet + :amt where id = :id',{"amt":amount, "id":current_user.id})
-            db.session.commit()
-            res = db.session.execute('SELECT wallet from "customer" where id = :id', {"id":current_user.id}).fetchone()
-            balance = res[0]
-            return render_template('book.html', locations = locations, loc = loc, balance = balance, opt = 1,username=current_user.username)
+            return render_template('book.html', locations = locations, loc = loc, balance = balance, opt = 1,username=current_user.username,profileurl=url[0])
 
         if request.form['btn'] == "Add money ":
             
             amount = request.form['amount']
-            
-            db.session.execute('UPDATE "customer" set wallet = wallet + :amt where id = :id',{"amt":amount, "id":current_user.id})
-            db.session.commit()
-            res = db.session.execute('SELECT wallet from "customer" where id = :id', {"id":current_user.id}).fetchone()
-            balance = res[0]
+            try:
+                if amount > 0 :
+                    db.session.execute('UPDATE "customer" set wallet = wallet + :amt where id = :id',{"amt":amount, "id":current_user.id})
+                    db.session.commit()
+                    res = db.session.execute('SELECT wallet from "customer" where id = :id', {"id":current_user.id}).fetchone()
+                    balance = res[0]
+                else :
+                    flash('Negative Amount','danger')
+            except:
+                flash('Invalid Amount','danger')
             if balance < cost:
                 flash(f'Balance insufficient! Please recharge your wallet.','warning')
-            return render_template('book.html',from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, balance = balance, opt = 2,username=current_user.username)
+            return render_template('book.html',from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, balance = balance, opt = 2,username=current_user.username,profileurl=url[0])
 
         if request.form['btn'] == "Confirm Booking":
             res = db.session.execute('SELECT wallet from "customer" where id = :id', {"id":current_user.id}).fetchone()
             balance = res[0]
             if balance < cost:
                 flash(f'Balance insufficient! Please recharge your wallet.','warning')
-                return render_template('book.html',from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, balance = balance, opt = 2,username=current_user.username)
+                return render_template('book.html',from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, balance = balance, opt = 2,username=current_user.username,profileurl=url[0])
             n = datetime.now()
             res = db.session.execute('SELECT id from "location" where loc_name = :f',{"f":from_location}).fetchone()
             
@@ -393,6 +491,7 @@ def book():
             db.session.execute('UPDATE "vehicle" set curr_user = :user where vehicle_number = :v',{"user":current_user.id, "v":vehicle_number})
             db.session.commit()
             otp = generateOTP()
+            print(otp)
             res = db.session.execute('SELECT email from "customer" where id = :id', {"id":current_user.id}).fetchone()
             email_id = res[0]
             msg = Message(subject=' OTP For ur Ride ', sender = 'roveapc.2020@gmail.com', recipients = [email_id])
@@ -405,7 +504,7 @@ def book():
             db.session.commit()
             res = db.session.execute('select model from "vehicle" where vehicle_number = :v ',{"v": vehicle_number}).fetchone()
             model = res[0]
-            return render_template('book.html', from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, opt = 3, balance = balance, vn = vehicle_number, model = model,username=current_user.username)
+            return render_template('book.html', from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, opt = 3, balance = balance, vn = vehicle_number, model = model,username=current_user.username,profileurl=url[0])
         
         
         if request.form['btn'] == "finish ride":
@@ -418,7 +517,7 @@ def book():
             return redirect (url_for('feedback'))               
     res = db.session.execute('SELECT wallet from "customer" where id = :id', {"id":current_user.id}).fetchone()
     balance = res[0]
-    return render_template('book.html', locations = locations, loc = loc, balance = balance, opt = 1,username=current_user.username)
+    return render_template('book.html', locations = locations, loc = loc, balance = balance, opt = 1,username=current_user.username,profileurl=url[0])
              
     
 @app.route("/feedback", methods=["GET","POST"])

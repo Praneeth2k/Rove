@@ -40,7 +40,7 @@
 	<li class="nav-item">
 		<a class="nav-link" id = 'i'   href= "#" style = "color:white">About</a>
 	</li>
-{% endblock %}
+	{% endblock %}
 
 
 
@@ -56,6 +56,7 @@
 			<div class="wrap-login100 p-t-0 p-b-20" style = "background-color:#272727;">
 				<form action='/signup' method="POST" class="login100-form validate-form">
 					{{ form.hidden_tag() }}
+					
 					<span class="login100-form-title p-b-20" style = "color:#6F2232">
 						Signup
 					</span>
@@ -95,6 +96,8 @@
 								{{ form.email(class="form-control form-control-lg is-valid") }}
 							{% endif %}
 						</div>
+						
+						
 						<div class="form-group">
 							{{ form.username.label(class="form-control-label") }}
 					

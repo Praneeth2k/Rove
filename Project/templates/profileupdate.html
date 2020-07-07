@@ -1,0 +1,83 @@
+
+{% extends 'layout.html' %}
+
+
+  {% block head %}
+      <title>Profile Update</title>
+  
+      <!--===============================================================================================-->	
+          <link rel="icon" type="image/png" href="static/images/icons/login.ico"/>
+      <!--===============================================================================================-->
+          <link rel="stylesheet" type="text/css" href="static/vendor/bootstrap/css/bootstrap.min.css">
+      <!--===============================================================================================-->
+          <link rel="stylesheet" type="text/css" href="static/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+      <!--===============================================================================================-->
+          <link rel="stylesheet" type="text/css" href="static/fonts/iconic/css/material-design-iconic-font.min.css">
+      <!--===============================================================================================-->
+          <link rel="stylesheet" type="text/css" href="static/vendor/animate/animate.css">
+      <!--===============================================================================================-->	
+          <link rel="stylesheet" type="text/css" href="static/vendor/css-hamburgers/hamburgers.min.css">
+      <!--===============================================================================================-->
+          <link rel="stylesheet" type="text/css" href="static/vendor/animsition/css/animsition.min.css">
+      <!--===============================================================================================-->
+          <link rel="stylesheet" type="text/css" href="static/vendor/select2/select2.min.css">
+      <!--===============================================================================================-->	
+          <link rel="stylesheet" type="text/css" href="static/vendor/daterangepicker/daterangepicker.css">
+      <!--===============================================================================================-->
+          <link rel="stylesheet" type="text/css" href="static/css/util.css">
+          <link rel="stylesheet" type="text/css" href="static/css/main.css">
+          <link href="static/style.css" rel="stylesheet">
+      <!--===============================================================================================-->
+  {% endblock %}
+  {% block container %}
+      <li class="nav-item">
+          <a class="nav-link" id = 'l'  href= "{{url_for('index')}}" style = "color:white">Index</a>
+      </li>
+          
+      <li class="nav-item">
+          <a class="nav-link" id = 'l'  href= "{{url_for('logout')}}"  style = "color:white"><b>Sign Out</b></a>
+      </li>
+     
+  {% endblock %}
+  
+  
+  
+  
+  {% block body %}
+      <div class="limiter">
+          <div class="container-login100 bg-narrow" style = "background-color:#272727;">
+              <div class="wrap-login100 p-t-10 p-b-100" style = "background-color:#272727;">
+                  <form  method="POST" enctype="multipart/form-data">
+                          {{ form.csrf_token }}
+                      <div class="form-group" >
+                          {{ form.pic }}
+                      </div>
+                      <div class="form-group" >
+                        {{ form.submit }}
+                      </div>
+                      
+                  </form>
+              </div>
+          </div>
+      </div>
+      <!--->
+      
+      <div id="dropDownSelect1"></div>
+      
+      <!--===============================================================================================-->
+      <script src="static/vendor/jquery/jquery-3.2.1.min.js"></script>
+      <!--===============================================================================================-->
+          <script src="static/vendor/animsition/js/animsition.min.js"></script>
+      <!--===============================================================================================-->
+          <script src="static/vendor/bootstrap/js/popper.js"></script>
+          <script src="static/vendor/bootstrap/js/bootstrap.min.js"></script>
+      <!--===============================================================================================-->
+          <script src="static/vendor/select2/select2.min.js"></script>
+      <!--===============================================================================================-->
+          <script src="static/vendor/daterangepicker/moment.min.js"></script>
+          <script src="static/vendor/daterangepicker/daterangepicker.js"></script>
+      <!--===============================================================================================-->
+          <script src="static/vendor/countdowntime/countdowntime.js"></script>
+      <!--===============================================================================================-->
+          <script src="static/js/main.js"></script>
+  {% endblock %}
