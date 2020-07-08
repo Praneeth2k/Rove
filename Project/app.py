@@ -445,12 +445,14 @@ def book():
             
             amount = request.form['amount']
             try:
-                if amount > 0 :
+                if int(amount) > 0 :
                     db.session.execute('UPDATE "customer" set wallet = wallet + :amt where id = :id',{"amt":amount, "id":current_user.id})
                     db.session.commit()
                     res = db.session.execute('SELECT wallet from "customer" where id = :id', {"id":current_user.id}).fetchone()
                     balance = res[0]
                 else :
+                    res = db.session.execute('SELECT wallet from "customer" where id = :id', {"id":current_user.id}).fetchone()
+                    balance = res[0]
                     flash('Negative Amount','danger')
             except:
                 flash('Invalid Amount ','danger')
@@ -461,13 +463,17 @@ def book():
         if request.form['btn'] == "Add money ":
             
             amount = request.form['amount']
+            res = db.session.execute('SELECT wallet from "customer" where id = :id', {"id":current_user.id}).fetchone()
+            balance = res[0]
             try:
-                if amount > 0 :
+                if int(amount) > 0 :
                     db.session.execute('UPDATE "customer" set wallet = wallet + :amt where id = :id',{"amt":amount, "id":current_user.id})
                     db.session.commit()
                     res = db.session.execute('SELECT wallet from "customer" where id = :id', {"id":current_user.id}).fetchone()
                     balance = res[0]
                 else :
+                    res = db.session.execute('SELECT wallet from "customer" where id = :id', {"id":current_user.id}).fetchone()
+                    balance = res[0]
                     flash('Negative Amount','danger')
             except:
                 flash('Invalid Amount','danger')
