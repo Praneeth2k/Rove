@@ -29,16 +29,16 @@
 
  {% block container %}
 	<li class="nav-item">
-		<a class="nav-link" id = 'l'  href= "{{url_for('index')}}" style = "color:white">Index</a>
+		<a class="nav-link" id = 'l'  href= "{{url_for('index')}}" style = "color:white"><i class="fa fa-institution"></i>  Index</a>
 	</li>
    	<li class="nav-item">
-		<a class="nav-link" id = 'l'  href= "{{url_for('login')}}" style = "color:white"><b>Login</b></a>
+		<a class="nav-link" id = 'l'  href= "{{url_for('login')}}" style = "color:rosybrown"><i class="fa fa-sign-in"></i>  <b>Login</b></a>
 	</li>
 	<li class="nav-item">
-		<a class="nav-link" id = 's'  href= "{{url_for('signup')}}"  style = "color:white; ">Signup</a>
+		<a class="nav-link" id = 's'  href= "{{url_for('signup')}}"  style = "color:white; "><i class="fa fa-user-plus"></i>  Signup</a>
 	</li>
 	<li class="nav-item">
-		<a class="nav-link" id = 'i'   href= "#" style = "color:white">About</a>
+		<a class="nav-link" id = 'i'   href= "{{url_for('index')}}" style = "color:white"><i class="fa fa-tag"></i>  About</a>
 	</li>
 {% endblock %}
 

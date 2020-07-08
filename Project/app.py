@@ -241,7 +241,7 @@ def login():
 @app.route('/signup', methods=['GET','POST'])
 def signup():
     if current_user.is_authenticated:
-        flash('Already Signed In .Press Log In to continue','info')
+        flash('Already Signed In .Press Log In to continue','success')
         return redirect(url_for('index'))
     form = RegisterForm()
     fi="Username already in use."
@@ -266,7 +266,7 @@ def signup():
         except:
             flash(f'{fi} Failed to create an Account .Create Account again !!','danger')
             return redirect(url_for('signup'))
-        flash('Upload Your two Wheeler License and continue','info')
+        flash('Upload Your two Wheeler License and continue','success')
         return redirect(url_for('DL',name=form.name.data))
     return render_template('signup.html',form=form)
 
@@ -289,7 +289,7 @@ def DL(name):
             db.session.add(newprofile)
             db.session.commit()
         except:
-            flash('couldnt insert license','danger')
+            flash('Couldnt Insert License','danger')
             db.session.execute('delete from "customer" where id= :ids',{"ids":customer.id})
             db.session.execute('DELETE from "User_login" where id = :ids',{"ids":customer.id})
             db.session.execute('DELETE from "profile" where id= : ids',{"ids":customer.id})
@@ -312,7 +312,7 @@ def forgot():
             return redirect(url_for('forgot'))
         user = User.query.filter_by(id = customer.id).first()
         reset_email(user)
-        flash('An email has been sent with instructions to reset your password.', 'info')
+        flash('An email has been sent with instructions to reset your password.', 'success')
         return redirect(url_for('login'))
     return render_template('reset_request.html', form=form)
 
@@ -347,7 +347,7 @@ def update():
         f"filename = {filename_url}"
         db.session.execute('UPDATE profile set pic_url=:url where id=:ids',{"url":filename_url,"ids":current_user.id})
         db.session.commit()
-        flash('Photo Updated Successfully','info')
+        flash('Photo Updated Successfully','success')
         return redirect(url_for('profile'))
     return render_template('profileupdate.html',form=form)
     
@@ -421,7 +421,7 @@ def book():
                 x2 = res[0]
                 y2 = res[1]
             except:
-                flash('Please select From and TO locations','danger')
+                flash('Please select From and To Locations','danger')
                 return redirect(url_for('book'))
             dist = round((math.sqrt((x1-x2)**2 + (y1-y2)**2)), 2)
             cost = int(dist * 3)
@@ -445,10 +445,13 @@ def book():
             
             amount = request.form['amount']
             try:
-                db.session.execute('UPDATE "customer" set wallet = wallet + :amt where id = :id',{"amt":amount, "id":current_user.id})
-                db.session.commit()
-                res = db.session.execute('SELECT wallet from "customer" where id = :id', {"id":current_user.id}).fetchone()
-                balance = res[0]
+                if amount > 0 :
+                    db.session.execute('UPDATE "customer" set wallet = wallet + :amt where id = :id',{"amt":amount, "id":current_user.id})
+                    db.session.commit()
+                    res = db.session.execute('SELECT wallet from "customer" where id = :id', {"id":current_user.id}).fetchone()
+                    balance = res[0]
+                else :
+                    flash('Negative Amount','danger')
             except:
                 flash('Invalid Amount ','danger')
                 return redirect(url_for('book'))
@@ -550,8 +553,7 @@ def done():
             db.session.commit()  
             return render_template('done.html', message = "Sorry for the inconvinience, your complaint has been registered", opt = 2)
 
-        if request.form['btn'] == 'sign-out':
-            return redirect(url_for('logout'))
+        
     return render_template("done.html", opt = 1)
 
 if __name__ == '__main__':

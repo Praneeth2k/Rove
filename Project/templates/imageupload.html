@@ -2,7 +2,7 @@
 
 
 {% block head %}
-    <title>Profile</title>
+    <title>License</title>
 
     <!--===============================================================================================-->	
         <link rel="icon" type="image/png" href="static/images/icons/login.ico"/>
@@ -30,17 +30,10 @@
 {% endblock %}
 {% block container %}
 	<li class="nav-item">
-		<a class="nav-link" id = 'l'  href= "{{url_for('index')}}" style = "color:white">Index</a>
+		<a class="nav-link" id = 'l'  href= "{{url_for('index')}}" style = "color:white"><i class="fa fa-institution"></i>  Home</a>
 	</li>
-   	<li class="nav-item">
-		<a class="nav-link" id = 'l'  href= "{{url_for('login')}}" style = "color:white;">Login</a>
-	</li>
-	<li class="nav-item">
-		<a class="nav-link" id = 'l'  href= "{{url_for('signup')}}"  style = "color:white"><b>Signup</b></a>
-	</li>
-	<li class="nav-item">
-		<a class="nav-link" id = 'i'   href= "/#" style = "color:white">About</a>
-	</li>
+   
+	
 {% endblock %}
 
 
@@ -56,7 +49,7 @@
                         {{ form.license }}
                     </div>
                     <div class="form-group" >
-                        <button type="submit" class="btn btn-primary">Upload License</button>
+                        <button type="submit" class="btn btn-primary">Upload License  <i class="fa fa-id-card" ></i></button>
                     </div>
                     
                 </form>
