@@ -31,19 +31,24 @@
     {% endblock %}
 {% block body %}
 <!--Body-->
-    <div style = "padding: 7rem;">
+    <div style = "padding: 4rem; padding-bottom: 15rem;">
         <form action = "/done", method = "POST">
-            <div>
-                <p>Book another ride:</p> <input type = "submit" name = "btn" value = "New Ride">
-            </div>
-            <br><br><br>
-            <div>
-                <p id = "dont-hide" class = "op2">Rise a complaint: </p><button id = "dont-hide-me" class = "op2 btn btn primary" type = 'button' onclick = "func()">Complain</button>
-                <textarea class = "hide op1 op2" name = "complaint" cols = 30 rows = 10 placeholder = "Type your complaint here"></textarea>
-                <input type = "submit" name = "btn" value = "comp" class="hide op1 op2 btn btn-outline-primary">
-                <p class = "op1">{{ message }}</p>
+
+            <div class = "row">
+                <div class = "col-md-4 col-lg-4 col-xl-4">
+                    <p style = "font-size: 1.5rem">Book another ride</p> <input type = "submit" name = "btn" class = "btn btn-outline-primary" value = "New Ride">
+                </div>
+                
+                <div class = "col-md-3 col-lg-3 col-xl-5">
+                    <p id = "dont-hide" class = "op2" style = "font-size: 1.5rem;">Rise a complaint </p><button id = "dont-hide-me" class = "op2 btn btn-outline-primary" type = 'button' onclick = "func()">Complain</button>
+                    <textarea class = "hide op1 op2" name = "complaint" cols = 30 rows = 10 placeholder = "Type your complaint here"></textarea><br>
+                    <input type = "submit" name = "btn" value = "Submit complaint" class="hide op1 op2 btn btn-outline-primary">
+                    <p class = "op1">{{ message }}</p>
+                </div>
+                
             </div>
             
+
         </form>
     </div>
 
@@ -72,7 +77,6 @@
    		    for (var i = 0; i < x.length; i++){
        		    x[i].style.display = "inline";
 		    }
-            document.getElementById("dont-hide").style.display = 'none';
             document.getElementById("dont-hide-me").style.display = 'none';
         }
         
