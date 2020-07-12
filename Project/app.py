@@ -15,8 +15,11 @@ from datetime import datetime
 import math, random
 
 
-app = Flask(__name__)
+from geopy.distance import geodesic
 
+
+
+app = Flask(__name__)
 
 
 ENV = 'dev'
@@ -114,13 +117,13 @@ class Location(db.Model):
     __tablename__ = 'location'
     id = db.Column(db.Integer, primary_key = True)
     loc_name = db.Column(db.String(40))
-    x_coordinate = db.Column(db.Float)
-    y_coordinate = db.Column(db.Float)
+    latitude = db.Column(db.Float)
+    longitude = db.Column(db.Float)
 
     def __init__(self, loc_name, x, y):
         self.loc_name = loc_name
-        self.x_coordinate = x
-        self.y_coordinate = y
+        self.latitude = x
+        self.longitude = y
 
 
 class Ride(db.Model):
@@ -199,6 +202,10 @@ Please ignore if request is not made by you. The token gets expired.
 -By Team Rove 
 '''
     mail.send(msg)
+def distancecalculator(x1,y1,x2,y2):
+    firstloc = (x1,y1)
+    secondloc = (x2,y2)
+    return (geodesic(firstloc, secondloc).km)
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -208,7 +215,8 @@ def load_user(user_id):
 @app.route('/')
 def index():
     if current_user.is_authenticated:
-        return render_template('index.html',opt=1)
+        url=db.session.execute('select pic_url from profile where id=:ids',{"ids":current_user.id}).fetchone() 
+        return render_template('index.html',opt=1,username=current_user.username,profileurl=url[0])
 
     return render_template('index.html',opt=2)
 
@@ -323,14 +331,14 @@ def forgot():
 @login_required
 def download():
     mylicense=Picture.query.filter_by(id=current_user.id).first()
-    return send_file(BytesIO(mylicense.License),attachment_filename=f'{current_user.username} License.jpeg' ,as_attachment=True)
+    return send_file(BytesIO(mylicense.License),attachment_filename=f'{current_user.username} License.png' ,as_attachment=True)
 
 @app.route('/profile',methods=['GET','POST'])
 @login_required
 def profile():
     
     myprofile = db.session.execute('select u.username,c.name,c.mobile,c.email,c.wallet from "User_login" as u, customer as c where c.id=u.id and c.id=:ids',{"ids":current_user.id}).fetchone()
-    history=db.session.execute('select r.vehicle_num, v.model, l1.loc_name as from, l2.loc_name as to, r.datentime from ride as r ,location  as l1,location as l2,vehicle as v where r.vehicle_num=v.vehicle_number and r.from_loc=l1.id and r.to_loc=l2.id and customer_id =:ids',{"ids":current_user.id}).fetchall() 
+    history=db.session.execute('select r.vehicle_num, v.model, l1.loc_name as from, l2.loc_name as to, r.datentime from ride as r ,location  as l1,location as l2,vehicle as v where r.vehicle_num=v.vehicle_number and r.from_loc=l1.id and r.to_loc=l2.id and customer_id =:ids order by r.datentime desc',{"ids":current_user.id}).fetchall() 
     url=db.session.execute('select pic_url from profile where id=:ids',{"ids":current_user.id}).fetchone() 
     return render_template('profile.html',myprofile=myprofile,history=history,profileurl=url[0])
 
@@ -414,17 +422,17 @@ def book():
             to_location = t
             print(from_location)
             try:
-                res = db.session.execute('SELECT x_coordinate, y_coordinate FROM "location" where loc_name =:from ',{"from":f}).fetchone()
+                res = db.session.execute('SELECT latitude, longitude FROM "location" where loc_name =:from ',{"from":f}).fetchone()
                 x1 = res[0]
                 y1 = res[1]
-                res = db.session.execute('SELECT x_coordinate, y_coordinate FROM "location" where loc_name =:to ',{"to":t}).fetchone()
+                res = db.session.execute('SELECT latitude, longitude FROM "location" where loc_name =:to ',{"to":t}).fetchone()
                 x2 = res[0]
                 y2 = res[1]
             except:
                 flash('Please select From and To Locations','danger')
                 return redirect(url_for('book'))
-            dist = round((math.sqrt((x1-x2)**2 + (y1-y2)**2)), 2)
-            cost = int(dist * 3)
+            dist=round(distancecalculator(x1=x1,y1=y1,x2=x2,y2=y2),2)
+            cost = int(dist * 4)
             A = "A"
             res= db.session.execute('select wallet from "customer" where id= :fid',{"fid":current_user.id}).fetchone()
             balance=res[0]
@@ -491,6 +499,7 @@ def book():
             res = db.session.execute('SELECT id from "location" where loc_name = :f',{"f":from_location}).fetchone()
             
             fid = res[0]
+                    
             NA = "NA"
             res = db.session.execute('select vehicle_number from "vehicle" where address = :i limit 1' ,{"i": fid}).fetchone()
             vehicle_number = res[0]
@@ -509,10 +518,12 @@ def book():
             print('sent')
             res = db.session.execute('SELECT id from "location" where loc_name = :t',{"t": to_location}).fetchone()
             t = res[0]
+            
             db.session.execute('INSERT into "ride"(vehicle_num, from_loc, to_loc, datentime, customer_id) values(:v, :f , :t, :tnc, :c)',{"v": vehicle_number, "f": fid, "t":t, "tnc":n ,"c":current_user.id})
             db.session.commit()
             res = db.session.execute('select model from "vehicle" where vehicle_number = :v ',{"v": vehicle_number}).fetchone()
             model = res[0]
+            
             return render_template('book.html', from_loc = from_location, to_loc = to_location, cost= cost, dist = dist, opt = 3, balance = balance, vn = vehicle_number, model = model,username=current_user.username,profileurl=url[0])
         
         
@@ -564,3 +575,11 @@ def done():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+#Details of Location Table (id,loc-name,latitude,longitude)
+'''1	"Basavanagudi"	12.941033	77.565411
+2	"Lal Bhag	"	12.952437	77.583425
+3	"Malleshwaram	"	13.009209	77.570752
+4	"Basaveshwaranagara	"	12.992843	77.538742
+5	"Whitefield"	12.978117	77.728293
+6	"Electronic City"	12.832734	77.680963 '''

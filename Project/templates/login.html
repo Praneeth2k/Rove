@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 {% import "bootstrap/wtf.html" as wtf %}
 {% block head %}
-	<title>Log in</title>
+	<title>Sign In</title>
 <!--===============================================================================================-->	
 	<link rel="icon" type="image/png" href="static/images/icons/login.ico"/>
 <!--===============================================================================================-->
@@ -32,10 +32,10 @@
 		<a class="nav-link" id = 'l'  href= "{{url_for('index')}}" style = "color:white"><i class="fa fa-institution"></i>  Index</a>
 	</li>
    	<li class="nav-item">
-		<a class="nav-link" id = 'l'  href= "{{url_for('login')}}" style = "color:rosybrown"><i class="fa fa-sign-in"></i>  <b>Login</b></a>
+		<a class="nav-link" id = 'l'  href= "{{url_for('login')}}" style = "color:rosybrown"><i class="fa fa-sign-in"></i>  <b>Sign In</b></a>
 	</li>
 	<li class="nav-item">
-		<a class="nav-link" id = 's'  href= "{{url_for('signup')}}"  style = "color:white; "><i class="fa fa-user-plus"></i>  Signup</a>
+		<a class="nav-link" id = 's'  href= "{{url_for('signup')}}"  style = "color:white; "><i class="fa fa-user-plus"></i>  Sign Up</a>
 	</li>
 	<li class="nav-item">
 		<a class="nav-link" id = 'i'   href= "{{url_for('index')}}" style = "color:white"><i class="fa fa-tag"></i>  About</a>
@@ -57,7 +57,7 @@
 				<form action="/login" method="POST" class="login100-form validate-form">
 					{{ form.hidden_tag() }}
 					<span class="login100-form-title p-b-35" style = "color:#6F2232">
-						Login
+						Sign-In
 					</span>
 					
 					<span class="login100-form-avatar">
@@ -80,7 +80,7 @@
 					
 					<div class="container-login100-form-btn">
 						<button type="submit" class="btn btn-outline-success">
-							Login
+							Sign In
 						</button>
 						
 						<a href="{{url_for('forgot')}}" style="padding: 1em " class="txt2" > forgot password </a>

@@ -37,10 +37,12 @@
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 			<img src="{{profileurl}}"  alt="Image" onerror=this.src="static/images/emptydp.png" height="30" width="30" class="profile-image img-circle"></t><b class="caret" style = "padding-left: 7px;">{{username}}</b></a>
-			<ul class="dropdown-menu" style = "background-color:rgb(250, 232, 209); list-style: none;">                                                                                                                                                                                                          
+			<ul class="dropdown-menu" style = "background-color:rgb(250, 232, 209); list-style:circle">                                                                                                                                                                                                          
 				<li><a href="{{url_for('profile')}}">&ensp;<i class="fa fa-user-circle-o"></i> &nbsp;Profile</a></li>
 				<li class="divider"></li>
-				<li><a href="{{url_for('logout')}}">&ensp;<i class="fa fa-sign-out"></i> &nbsp;Sign-out</a></li>
+				<li><a href="{{url_for('index')}}">&ensp;<i class="fa fa-institution"></i> &nbsp;Home</a></li>
+				<li class="divider"></li>
+				<li><a href="{{url_for('logout')}}">&ensp;<i class="fa fa-sign-out"></i> &nbsp;Sign out</a></li>
 			</ul>
 		</li>
 	</li>
@@ -108,9 +110,11 @@
 						<input class ="op1 op3 op4 btn btn-outline-primary op4" style = "font-family:Arial" id="foo" type="submit" name="btn" value="Confirm Booking">
 						<input class ="op1 op2 op4 btn btn-outline-primary op4" type="submit" id="moo" name = "btn" value = "start ride">
 						<input class ="op1 op2 op3 btn btn-outline-primary" type="submit" id="doo" name = "btn" value = "finish ride">
+						
 					  </div>
 					  <div class = "balance col-lg-4 col-xl-4 op4" id = "cash" style = "border-radius: 25px; background:rgb(255, 85, 85); width:fit-content; height:fit-content; align-content: center;">
 						<h3 id = "wallet" style = "font-size:1rem; color: antiquewhite;">Your remaining balance is: Rs {{ balance }}</h3>
+						
 						<button onclick="add_money()" type="button" class="btn btn-info btn-sm" id = "Add money">Add money</button><br>
 						
 						<input style = "display:none" class = "op1" type = "text" placeholder = "Enter amount" name = "amount" id = "amount"><br><br>
@@ -122,6 +126,7 @@
 		</div>
 			
 	</form>
+
 </div>
 <div class="container-fluid padding" id="about">
 	<div class="row padding">
@@ -134,8 +139,8 @@
 			<img src="static/images/{{ vn }}.jpg" class="img-fluid" alt="{{model}}" >
 		</div>
 	</div>
-</div>	
-	
+</div>
+
 
 
 
