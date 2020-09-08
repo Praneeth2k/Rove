@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block head %}
-	<title>Profile</title>
+	<title>Rove: Profile</title>
 	<meta id="option" >
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -36,7 +36,7 @@
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 			<img src="{{profileurl}}"  alt="Image" onerror=this.src="static/images/emptydp.png" height="30" width="30" class="profile-image img-circle"></t><b class="caret" style = "padding-left: 7px;">{{myprofile.username}}</b></a>
       <ul class="dropdown-menu" style = "background-color:rgb(250, 232, 209); list-style: none;"> 
-        <li><a href="{{url_for('index')}}">&ensp;<i class="fa fa-institution"></i> &nbsp;Home</a></li>
+        <li><a href="{{url_for('index')}}">&ensp;<i class="fa fa-home"></i> &nbsp;Home</a></li>
 				<li class="divider"></li>                                                                                                                                                                                                         
 				<li><a href="{{url_for('book')}}">&ensp;<i class ="fa fa-motorcycle"></i> &nbsp;Book Ride</a></li>
 				<li class="divider"></li>
@@ -119,11 +119,11 @@
           
           {%for h in history%}
           <TR>
-            <td>{{h.vehicle_num}}</td>
-            <td>{{h.model}}</td>
-            <td>{{h.from}}</td>
-            <td>{{h.to}}</td>
-            <td>{{h.datentime}}</td>
+            <td>{{h[0]}}</td>
+            <td>{{h[1]}}</td>
+            <td>{{h[2]}}</td>
+            <td>{{h[3]}}</td>
+            <td>{{h[4]}}</td>
 
           </TR>
                             

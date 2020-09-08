@@ -1,15 +1,15 @@
 {% extends 'layout.html' %}
 
 {% block head %}
-	<title>Home</title>
+	<title>Rove: Home</title>
 	<meta id="option" data-name="{{ opt }}">
 	<link rel="icon" type="image/png" href="static/images/icons/home1.jpg"/>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-	
+	<link rel="stylesheet" type="text/css" href="static/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-	<script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+	
 	<link href="static/style.css" rel="stylesheet">
 	
 {% endblock %}
@@ -17,7 +17,7 @@
 {% block container %}
 	<div class = "op1">
 		<li class="nav-item">
-			<a class="nav-link" id = 'l'  href= "{{url_for('login')}}" style = "color:white"><i class="fa fa-sign-in"></i>  Sign In</a>
+			<a class="nav-link" id = 'l'  href= "{{url_for('login')}}" style = "color:white"><i class="fa fa-user-o" aria-hidden="true"></i> Sign In</a>
 		</li>
 	</div>
 	<div class = "op1">
@@ -27,10 +27,15 @@
 	</div>
 	<div class="op1">
 		<li class="nav-item">
-			<a class="nav-link" id = 'i'   href= "#about" style = "color:rosybrown"><i class="fa fa-institution"></i>  About</a>
+			<a class="nav-link" id = 'i'   href= "#about" style = "color:rosybrown"><i class="fa fa-tag"></i>  About</a>
 		</li>
 	</div>
+	<div class = "op1">
+		<li class="nav-item">
+			<a class="nav-link" id = 'l'  href= "#help" style = "color:white"><i class="fa fa-telegram" aria-hidden="true"></i></i> Help</a>
+		</li>
 	</div>
+	
 	<div class="op2">
 		<li class="nav-item">
 			<li class="dropdown">
@@ -41,8 +46,7 @@
 					<li class="divider"></li>                                                                                                                                                                                                      
 					<li><a href="{{url_for('book')}}">&ensp;<i class ="fa fa-motorcycle"></i> &nbsp;Book Ride</a></li>
 					<li class="divider"></li>
-					
-					<li><a href="{{url_for('logout')}}">&ensp;<i class="fa fa-sign-out"></i> &nbsp;Sign Out</a></li>
+					<li><a href="{{url_for('logout')}}">&ensp;<i class="fa fa-eject" aria-hidden="true"></i> &nbsp;Sign Out</a></li>
 				</ul>
 			</li>
 		</li> 
@@ -83,7 +87,7 @@
 <div class="container-fluid padding" style = "color:aqua">
 	<div class="row welcome text-center">
 		<div class="col-12">
-			<h1 class="display-4">Books scooter with ease</h1><hr>
+			<h1 class="display-4">Book scooter with ease</h1><hr>
 		</div>
 		
 		<div class="col-12">

@@ -1,38 +1,76 @@
-{% extends 'layout.html' %}
+
 {% import "bootstrap/wtf.html" as wtf %}
-{% block head %}
-	<title>Reset Password</title>
-<!--===============================================================================================-->	
-	<link rel="icon" type="image/png" href="http://127.0.0.1:5000/static/images/icons/login.ico"/>
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="http://127.0.0.1:5000/static/vendor/bootstrap/css/bootstrap.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="http://127.0.0.1:5000/static/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="http://127.0.0.1:5000/static/fonts/iconic/css/material-design-iconic-font.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="http://127.0.0.1:5000/static/vendor/animate/animate.css">
-<!--===============================================================================================-->	
-	<link rel="stylesheet" type="text/css" href="http://127.0.0.1:5000/static/vendor/css-hamburgers/hamburgers.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="http://127.0.0.1:5000/static/vendor/animsition/css/animsition.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="http://127.0.0.1:5000/static/vendor/select2/select2.min.css">
-<!--===============================================================================================-->	
-	<link rel="stylesheet" type="text/css" href="http://127.0.0.1:5000/static/vendor/daterangepicker/daterangepicker.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="http://127.0.0.1:5000/static/css/util.css">
-	<link rel="stylesheet" type="text/css" href="http://127.0.0.1:5000/static/css/main.css">
-	<link href="http://127.0.0.1:5000/static/style.css" rel="stylesheet">
-<!--===============================================================================================-->
- {% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Rove: Reset Password</title>
+	<!--===============================================================================================-->	
+		<link rel="icon" type="image/png" href="/static/images/icons/login.ico"/>
+	<!--===============================================================================================-->
+		<link rel="stylesheet" type="text/css" href="/static/vendor/bootstrap/css/bootstrap.min.css">
+	<!--===============================================================================================-->
+		<link rel="stylesheet" type="text/css" href="/static/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+	<!--===============================================================================================-->
+		<link rel="stylesheet" type="text/css" href="/static/fonts/iconic/css/material-design-iconic-font.min.css">
+	<!--===============================================================================================-->
+		<link rel="stylesheet" type="text/css" href="/static/vendor/animate/animate.css">
+	<!--===============================================================================================-->	
+		<link rel="stylesheet" type="text/css" href="/static/vendor/css-hamburgers/hamburgers.min.css">
+	<!--===============================================================================================-->
+		<link rel="stylesheet" type="text/css" href="/static/vendor/animsition/css/animsition.min.css">
+	<!--===============================================================================================-->
+		<link rel="stylesheet" type="text/css" href="/static/vendor/select2/select2.min.css">
+	<!--===============================================================================================-->	
+		<link rel="stylesheet" type="text/css" href="/static/vendor/daterangepicker/daterangepicker.css">
+	<!--===============================================================================================-->
+		<link rel="stylesheet" type="text/css" href="/static/css/util.css">
+		<link rel="stylesheet" type="text/css" href="/static/css/main.css">
+		<link href="/static/style.css" rel="stylesheet">
+	<!--===============================================================================================-->
+
+   
+</head>
+<body style = "background-color:#272727; color:#C3073F">
+		
+	
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-md navbar-light bg-dark sticky-top">
+<div class="container-fluid">
+	<a class="navbar-brand" href="#"><img src="/static/images/logo.jpeg" width="180" height="90"></a>
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
+			<span class="navbar-toggler-icon" ></span>	
+	</button>
+	<div class="collapse navbar-collapse" id="navbarResponsive">
+		<ul class="navbar-nav ml-auto">
+			
+		</ul> 
+
+		
+	</div>
+</div>
+</nav>
+<div id = "flash" class="row">
+	<div class="col-xs-6 col-sm-4 col-md-12">
+		{% with messages = get_flashed_messages(with_categories=true) %}
+		{% if messages %}
+			{% for category, message in messages %}
+			<div class="alert alert-{{ category }}">
+				{% if category == "success"  %}
+				<p style="text-align:center;"><i class="fa fa-check-circle"></i> {{ message }}</p>
+				{% else %}
+				<p style="text-align:center;"><i class="fa fa-times-circle"></i> {{ message }}</p>
+				{% endif %}
+			</div>
+			{% endfor %}
+		{% endif %}
+		{% endwith %}
+	</div>
+</div>
 
 
-
-
-
-
-{% block body %}
 <!--Body-->
 
 
@@ -46,7 +84,7 @@
 					</span>
 					
 					<span class="login100-form-avatar">
-						<img src="http://127.0.0.1:5000/static/images/logo.jpeg" alt="ROVE" width="150" height="50">
+						<img src="/static/images/logo.jpeg" alt="ROVE" width="150" height="50">
 					</span>
 					<h4 style = "color:crimson; font-family:cursive; font-size:1.2rem">{{ message }}</h4>
 					<div class="form-group" >
@@ -71,19 +109,73 @@
 	<div id="dropDownSelect1"></div>
 	
 <!--===============================================================================================-->
-<script src="http://127.0.0.1:5000/static/vendor/jquery/jquery-3.2.1.min.js"></script>
+<script src="/static/vendor/jquery/jquery-3.2.1.min.js"></script>
 <!--===============================================================================================-->
-	<script src="http://127.0.0.1:5000/static/vendor/animsition/js/animsition.min.js"></script>
+	<script src="/static/vendor/animsition/js/animsition.min.js"></script>
 <!--===============================================================================================-->
-	<script src="http://127.0.0.1:5000/static/vendor/bootstrap/js/popper.js"></script>
-	<script src="http://127.0.0.1:5000/static/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script src="/static/vendor/bootstrap/js/popper.js"></script>
+	<script src="/static/vendor/bootstrap/js/bootstrap.min.js"></script>
 <!--===============================================================================================-->
-	<script src="http://127.0.0.1:5000/static/vendor/select2/select2.min.js"></script>
+	<script src="/static/vendor/select2/select2.min.js"></script>
 <!--===============================================================================================-->
-	<script src="http://127.0.0.1:5000/static/vendor/daterangepicker/moment.min.js"></script>
-	<script src="http://127.0.0.1:5000/static/vendor/daterangepicker/daterangepicker.js"></script>
+	<script src="/static/vendor/daterangepicker/moment.min.js"></script>
+	<script src="/static/vendor/daterangepicker/daterangepicker.js"></script>
 <!--===============================================================================================-->
-	<script src="http://127.0.0.1:5000/static/vendor/countdowntime/countdowntime.js"></script>
+	<script src="/static/vendor/countdowntime/countdowntime.js"></script>
 <!--===============================================================================================-->
-	<script src="http://127.0.0.1:5000/static/js/main.js"></script>
-{% endblock %}
+	<script src="/static/js/main.js"></script>
+
+
+
+
+<script>
+	function index(){
+		location.href = "{{url_for('index')}}";
+	}
+	function login(){
+		location.href = "{{url_for('login')}}";
+	}
+	function signup(){
+		location.href = "{{url_for('signup')}}";
+	}
+	function signout(){
+		location.href = "{{url_for('logout')}}";
+	}
+	function book(){
+		location.href = "{{url_for('book')}}";
+	}
+</script>
+
+<!--- Footer -->
+<footer>
+<div class="container-fluid">
+	<div class="row text-center " height="75">
+		<div class="col-md-4">
+			<img src="/static/images/logo.jpeg" width="200" height="100">
+		</div>
+		<div class="col-md-4">
+			<h2><span>Connect via</span></h2>
+						<a href="https://www.instagram.com/"><img src="/static/images/instagram.jpg" alt="Instagram>" width="25" height="25"/></a>
+						<a href="https://www.twitter.com/"><img src="/static/images/twitter.png" alt="Twitter" width="25" height="25"/></a>
+						<a href="https://www.fb.com/"><img src="/static/images/facebook.png" alt="Facebook" width="25" height="25"/></a>
+		</div>
+		<div class="col-md-4" id="help">
+		<h2><span>Customer Care</span></h2>
+						E-mail:  <a style="color:rgb(135, 248, 248);" href="mailto:roveapc.2020@gmail.com?Subject=help" target="_top">roveapc.2020@gmail.com</a><br>
+						Ph-No:   761-951-9441, 809-535-2841, 701-941-3070
+		</div>
+	</div>
+</div>
+</footer>
+
+
+
+</body>
+</html>
+	
+ 
+
+
+
+
+

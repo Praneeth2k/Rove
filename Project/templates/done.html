@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
    {% block head %}
-    <title>Done</title>
+    <title>Rove: Done</title>
     <!--===============================================================================================-->	
 	<link rel="icon" type="image/png" href="static/images/icons/done.ico"/>
     <!--===============================================================================================-->
@@ -25,30 +25,41 @@
     <!--===============================================================================================-->
    {% endblock %}
    {% block container %}
-    <li class = "nav-item">
-        <a class="nav-link" id = 'so' onclick = "signout()" href= "#"  style = "color:white"><i class="fa fa-sign-out"></i>Log Out</a>
-    </li>
+   
     {% endblock %}
 {% block body %}
+<div >
+    <p  >Thanks for Choosing ROVE.</p>
+</div>
 <!--Body-->
-    <div style = "padding: 4rem; padding-bottom: 15rem;">
+    <div style = "padding: 7rem;">
         <form action = "/done", method = "POST">
-
-            <div class = "row">
-                <div class = "col-md-4 col-lg-4 col-xl-4">
-                    <p style = "font-size: 1.5rem">Book another ride</p> <input type = "submit" name = "btn" class = "btn btn-outline-primary" value = "New Ride">
+            <div class ="row text-center">
+                <div class="col-sm-3 col-lg-6">
+                    <div><p>Wanna Sign Out :</p></div>
+                    <input type= "submit" name="btn" value="Sign Out">
                 </div>
+                <div class="col-sm-9 col-lg-6">
+                    <div><p>Wanna Go Home :</p></div>
+                    <input type= "submit" name="btn" value="Home">
+                </div>
+            </div>
+        
+            <div>
+                <p>Book another ride:</p> <input type = "submit" name = "btn" value = "New Ride">
+            </div>
+            <br><br><br>
+            <div>
+                <p id = "dont-hide" class = "op2">Rise a complaint: </p><button id = "dont-hide-me" class = "op2 btn btn primary" type = 'button' onclick = "func()">Complain</button>
+                <textarea class = "hide op1 op2" name = "complaint" cols = 30 rows = 10 placeholder = "Type your complaint here"></textarea>
+                <input type = "submit" name = "btn" value = "comp" class="hide op1 op2 btn btn-outline-primary">
+                <p class = "op1">{{ message }}</p>
                 
-                <div class = "col-md-3 col-lg-3 col-xl-5">
-                    <p id = "dont-hide" class = "op2" style = "font-size: 1.5rem;">Rise a complaint </p><button id = "dont-hide-me" class = "op2 btn btn-outline-primary" type = 'button' onclick = "func()">Complain</button>
-                    <textarea class = "hide op1 op2" name = "complaint" cols = 30 rows = 10 placeholder = "Type your complaint here"></textarea><br>
-                    <input type = "submit" name = "btn" value = "Submit complaint" class="hide op1 op2 btn btn-outline-primary">
-                    <p class = "op1">{{ message }}</p>
-                </div>
+                    
+                        
                 
             </div>
             
-
         </form>
     </div>
 
@@ -77,6 +88,7 @@
    		    for (var i = 0; i < x.length; i++){
        		    x[i].style.display = "inline";
 		    }
+            document.getElementById("dont-hide").style.display = 'none';
             document.getElementById("dont-hide-me").style.display = 'none';
         }
         
@@ -87,4 +99,5 @@
 	    }
     
     </script>
+    
    {% endblock %}

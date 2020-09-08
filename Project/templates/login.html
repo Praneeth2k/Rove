@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 {% import "bootstrap/wtf.html" as wtf %}
 {% block head %}
-	<title>Sign In</title>
+	<title>Rove: Sign In</title>
 <!--===============================================================================================-->	
 	<link rel="icon" type="image/png" href="static/images/icons/login.ico"/>
 <!--===============================================================================================-->
@@ -29,7 +29,7 @@
 
  {% block container %}
 	<li class="nav-item">
-		<a class="nav-link" id = 'l'  href= "{{url_for('index')}}" style = "color:white"><i class="fa fa-institution"></i>  Index</a>
+		<a class="nav-link" id = 'l'  href= "{{url_for('index')}}" style = "color:white"><i class="fa fa-home"></i>  Home</a>
 	</li>
    	<li class="nav-item">
 		<a class="nav-link" id = 'l'  href= "{{url_for('login')}}" style = "color:rosybrown"><i class="fa fa-sign-in"></i>  <b>Sign In</b></a>
@@ -65,10 +65,9 @@
 					</span>
 					<h4 style = "color:crimson; font-family:cursive; font-size:1.2rem">{{ message }}</h4>
 					<div class="form-group" >
-						
-        				{{ wtf.form_field(form.username) }}
-						     
-					</div>
+						{{ wtf.form_field(form.username) }}
+						  
+        			</div>
 
 					<div class="form-group" >
 						{{ wtf.form_field(form.password) }}

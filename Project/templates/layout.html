@@ -14,7 +14,7 @@
 <!-- Navigation -->
 <nav class="navbar navbar-expand-md navbar-light bg-dark sticky-top">
 <div class="container-fluid">
-	<a class="navbar-brand" href="#"><img src="http://127.0.0.1:5000/static/images/logo.jpeg" width="180" height="90"></a>
+	<a class="navbar-brand" href="#"><img src="/static/images/logo.jpeg" width="180" height="90"></a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
 			<span class="navbar-toggler-icon" ></span>	
 	</button>
@@ -50,13 +50,13 @@
 
 <script>
 	function index(){
-		location.href = "/";
+		location.href = "{{url_for('index')}}";
 	}
 	function login(){
-		location.href = "/login";
+		location.href = "{{url_for('login')}}";
 	}
 	function signup(){
-		location.href = "/signup";
+		location.href = "{{url_for('signup')}}";
 	}
 	function signout(){
 		location.href = "{{url_for('logout')}}";
@@ -71,18 +71,19 @@
 <div class="container-fluid">
 	<div class="row text-center " height="75">
 		<div class="col-md-4">
-			<img src="http://127.0.0.1:5000/static/images/logo.jpeg" width="200" height="100">
+			<img src="static/images/logo.jpeg" width="200" height="100">
 		</div>
 		<div class="col-md-4">
 			<h2><span>Connect via</span></h2>
-						<a href="https://www.instagram.com/"><img src="http://127.0.0.1:5000/static/images/instagram.jpg" alt="Instagram>" width="25" height="25"/></a>
-						<a href="https://www.twitter.com/"><img src="http://127.0.0.1:5000/static/images/twitter.png" alt="Twitter" width="25" height="25"/></a>
-						<a href="https://www.fb.com/"><img src="http://127.0.0.1:5000/static/images/facebook.png" alt="Facebook" width="25" height="25"/></a>
+						<a href="https://www.instagram.com/"><img src="static/images/instagram.jpg" alt="Instagram>" width="25" height="25"/></a>
+						<a href="https://www.twitter.com/"><img src="static/images/twitter.png" alt="Twitter" width="25" height="25"/></a>
+						<a href="https://www.fb.com/"><img src="static/images/facebook.png" alt="Facebook" width="25" height="25"/></a>
 		</div>
 		<div class="col-md-4" id="help">
 		<h2><span>Customer Care</span></h2>
 						E-mail:  <a style="color:rgb(135, 248, 248);" href="mailto:roveapc.2020@gmail.com?Subject=help" target="_top">roveapc.2020@gmail.com</a><br>
-						Ph-No:   080-123-45688
+						Ph-No:   761-951-9441 , 809-535-2841, 701-941-3070
+					</div>
 		</div>
 	</div>
 </div>

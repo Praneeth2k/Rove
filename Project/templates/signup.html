@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 
 	{% block head %}
-	 <title>Sign Up</title>
+	 <title>Rove: Sign Up</title>
 <!--===============================================================================================-->	
 	<link rel="icon" type="image/png" href="static/images/icons/sinup.ico"/>
 <!--===============================================================================================-->
@@ -29,7 +29,7 @@
 
 	{% block container %}
 	<li class="nav-item">
-		<a class="nav-link" id = 'l'  href= "{{url_for('index')}}" style = "color:white"><i class="fa fa-institution"></i>  Index</a>
+		<a class="nav-link" id = 'l'  href= "{{url_for('index')}}" style = "color:white"><i class="fa fa-home"></i>  Home</a>
 	</li>
    	<li class="nav-item">
 		<a class="nav-link" id = 'l'  href= "{{url_for('login')}}" style = "color:white;"><i class="fa fa-sign-in"></i>  Sign In</a>
@@ -54,7 +54,7 @@
 	<div class="limiter">
 		<div class="container-login100" style = "background-color:#272727">
 			<div class="wrap-login100 p-t-0 p-b-20" style = "background-color:#272727;">
-				<form action='/signup' method="POST" class="login100-form validate-form">
+				<form action="/signup" method="POST" class="login100-form validate-form">
 					{{ form.hidden_tag() }}
 					
 					<span class="login100-form-title p-b-20" style = "color:#6F2232">
@@ -65,6 +65,9 @@
 					</span>
 					<fieldset class="form-group">
 						<legend class="border-bottom mb-4">Join Today</legend>
+						
+						  
+						  
 						<div class="form-group">
 							{{ form.name.label(class="form-control-label") }}
 							{{ form.name(class="form-control form-control-lg is-valid") }}
@@ -140,8 +143,11 @@
 								{{ form.confirm_password(class="form-control form-control-lg is-valid") }}
 							{% endif %}
 						</div>
+						
 					</fieldset>
-    
+					<div class="form-group">
+						{{form.recaptcha}}
+					</div>
 					<div class="container-login100-form-btn">
 						{{form.submit(class="btn btn-outline-info")}}
 					</div>

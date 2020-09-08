@@ -1,6 +1,6 @@
 {% extends 'layout.html'%}
 {% block head %}
-	<title>BOOK</title>
+	<title>Rove: BOOK</title>
 	<meta id="option" data-name="{{ opt }}">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -40,7 +40,7 @@
 			<ul class="dropdown-menu" style = "background-color:rgb(250, 232, 209); list-style:circle">                                                                                                                                                                                                          
 				<li><a href="{{url_for('profile')}}">&ensp;<i class="fa fa-user-circle-o"></i> &nbsp;Profile</a></li>
 				<li class="divider"></li>
-				<li><a href="{{url_for('index')}}">&ensp;<i class="fa fa-institution"></i> &nbsp;Home</a></li>
+				<li><a href="{{url_for('index')}}">&ensp;<i class="fa fa-home"></i> &nbsp;Home</a></li>
 				<li class="divider"></li>
 				<li><a href="{{url_for('logout')}}">&ensp;<i class="fa fa-sign-out"></i> &nbsp;Sign out</a></li>
 			</ul>
@@ -103,7 +103,7 @@
 						<div class = "op1">Distance : {{ dist }} Km &ensp; Cost : {{ cost }} Rs </div>
 						
 						
-						<div class = "op1 op2 op4" style = "color: rgb(255, 85, 85); font-family: helvetica;">An OTP has beeen sent to your mail. Kindly check </div>
+						<div class = "op1 op2 op4" style = "color: rgb(255, 85, 85); font-family: helvetica;">An OTP has been sent to your mail. Kindly check </div>
 						<h3 class = "op1 op2 op4">{{ mesg }}</h3>
 						<div class = "op1 op2 op4" style = "color:rgba(105, 255, 85, 0.993); font-family:Georgia; font-size: 1.4em;">Enter the otp here:  <input size="4" maxlength="4" height = "1" type = "text" name = "otp"></div>
 						<br><br>
